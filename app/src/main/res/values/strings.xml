@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Расходы</string>
+    <string name="toolbar_settings">Настройки</string>
+    <string name="action_settings">Настройки</string>
+    <string name="settings_label_lang">Язык</string>
+    <string name="settings_lang_en">Английский</string>
+    <string name="settings_lang_ru">Русский</string>
+</resources>
