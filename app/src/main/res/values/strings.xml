@@ -3,6 +3,11 @@
     <string name="toolbar_settings">Настройки</string>
     <string name="action_settings">Настройки</string>
     <string name="settings_label_lang">Язык</string>
-    <string name="settings_lang_en">Английский</string>
-    <string name="settings_lang_ru">Русский</string>
+    <string name="settings_lang_radio_en">Английский</string>
+    <string name="settings_lang_radio_ru">Русский</string>
+    <string name="settings_file_key">com.github.blackenwhite.costplanner.SETTINGS_FILE_KEY</string>
+    <string name="lang">lang</string>
+    <string name="lang_en">en</string>
+    <string name="lang_ru">ru</string>
+    <string name="def_lang">ru</string>
 </resources>

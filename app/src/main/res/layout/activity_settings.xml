@@ -40,12 +40,12 @@
                     <RadioButton android:id="@+id/radio_en"
                                  android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"
-                                 android:text="@string/settings_lang_en"
+                                 android:text="@string/settings_lang_radio_en"
                                  android:onClick="onRadioButtonClicked"/>
                     <RadioButton android:id="@+id/radio_ru"
                                  android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"
-                                 android:text="@string/settings_lang_ru"
+                                 android:text="@string/settings_lang_radio_ru"
                                  android:onClick="onRadioButtonClicked"/>
                 </RadioGroup>
             </TableRow>

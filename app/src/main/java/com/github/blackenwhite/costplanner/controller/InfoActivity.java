@@ -20,8 +20,8 @@ import java.util.Locale;
 
 public class InfoActivity extends AppCompatActivity {
     private static final String TAG = "InfoActivity";
-    private static String sLang = Locale.getDefault().getCountry();
 
+    private static String sLang;
     private Date mDate;
 
     @Override
@@ -35,7 +35,7 @@ public class InfoActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        mDate = new Date();
+        mDate = new Date(new Locale(SettingsActivity.getLangPref(this)));
         TextView dateLabel = (TextView) findViewById(R.id.label_date);
         dateLabel.setText(mDate.toString());
     }
@@ -43,17 +43,7 @@ public class InfoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        Locale actLocale = new Locale(sLang);
-        if (!conf.locale.getCountry().equalsIgnoreCase(actLocale.getCountry())) {
-            conf.locale = actLocale;
-            res.updateConfiguration(conf, dm);
-            Intent refresh = new Intent(this, InfoActivity.class);
-            startActivity(refresh);
-            finish();
-        }
+        updateLocale();
     }
 
     @Override
@@ -61,15 +51,9 @@ public class InfoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
-                sLang = data.getStringExtra("lang");
-                setLocale(sLang);
+                updateLocale();
             }
         }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -95,10 +79,6 @@ public class InfoActivity extends AppCompatActivity {
         }
     }
 
-    public static String getLang() {
-        return sLang;
-    }
-
     private void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Resources res = getResources();
@@ -110,5 +90,17 @@ public class InfoActivity extends AppCompatActivity {
         Intent refresh = new Intent(this, InfoActivity.class);
         startActivity(refresh);
         finish();
+    }
+
+    private void updateLocale() {
+        if (sLang == null) {
+            sLang = SettingsActivity.getLangPref(this);
+            setLocale(sLang);
+            return;
+        }
+        if (!sLang.equalsIgnoreCase(SettingsActivity.getLangPref(this))) {
+            sLang = SettingsActivity.getLangPref(this);
+            setLocale(sLang);
+        }
     }
 }

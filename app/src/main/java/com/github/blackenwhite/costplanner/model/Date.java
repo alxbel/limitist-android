@@ -16,14 +16,16 @@ public class Date {
     private static final String DATE_FORMAT = "E dd.MM.yyyy";
 
     private LocalDate mLocalDate;
+    private Locale mLocale;
 
-    public Date() {
+    public Date(Locale locale) {
         mLocalDate = new LocalDate();
+        mLocale = locale;
     }
 
     @Override
     public String toString() {
         DateTimeFormatter fmt = DateTimeFormat.forPattern(DATE_FORMAT);
-        return fmt.withLocale(new Locale(InfoActivity.getLang())).print(mLocalDate);
+        return fmt.withLocale(mLocale).print(mLocalDate);
     }
 }

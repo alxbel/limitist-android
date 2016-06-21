@@ -1,6 +1,7 @@
 package com.github.blackenwhite.costplanner.controller;
 
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,9 +12,7 @@ import android.widget.RadioButton;
 import com.github.blackenwhite.costplanner.R;
 
 public class SettingsActivity extends AppCompatActivity {
-
     private FloatingActionButton mButtonSave;
-    private String mSelectedLang = InfoActivity.getLang();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("lang", mSelectedLang);
-                setResult(RESULT_OK, intent);
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -45,13 +42,28 @@ public class SettingsActivity extends AppCompatActivity {
         // Check which radio button was clicked
         switch(view.getId()) {
             case R.id.radio_en:
-                if (checked)
-                    mSelectedLang = "en";
+                    writeLangPref(getString(R.string.lang_en));
                     break;
             case R.id.radio_ru:
                 if (checked)
-                    mSelectedLang = "ru";
+                    writeLangPref(getString(R.string.lang_ru));
                     break;
         }
+    }
+
+    public static final String getLangPref(Context ctx) {
+        SharedPreferences sharedPref = ctx.getSharedPreferences(
+                ctx.getString(R.string.settings_file_key), Context.MODE_PRIVATE);
+        String defLang = ctx.getString(R.string.def_lang);
+        String lang = sharedPref.getString(ctx.getString(R.string.lang), defLang);
+        return lang;
+    }
+
+    private void writeLangPref(String newLang) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.settings_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.lang), newLang);
+        editor.commit();
     }
 }
