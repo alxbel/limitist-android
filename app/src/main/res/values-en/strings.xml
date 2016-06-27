@@ -10,4 +10,8 @@
     <string name="lang_en">en</string>
     <string name="lang_ru">ru</string>
     <string name="def_lang">ru</string>
+    <string name="action_limits">Limits</string>
+    <string name="toolbar_limits">Limits</string>
+    <string name="action_about">About</string>
+    <string name="toolbar_about">About</string>
 </resources>

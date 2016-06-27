@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import com.github.blackenwhite.costplanner.R;
 
 public class SettingsActivity extends AppCompatActivity {
+
     private FloatingActionButton mButtonSave;
 
     @Override

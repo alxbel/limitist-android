@@ -20,6 +20,14 @@
             android:name=".controller.SettingsActivity"
             android:parentActivityName=".controller.InfoActivity">
         </activity>
+        <activity
+            android:name=".controller.LimitsActivity"
+            android:parentActivityName=".controller.InfoActivity">
+        </activity>
+        <activity
+            android:name=".controller.AboutActivity"
+            android:parentActivityName=".controller.InfoActivity">
+        </activity>
     </application>
 
 </manifest>

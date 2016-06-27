@@ -20,6 +20,9 @@ import java.util.Locale;
 
 public class InfoActivity extends AppCompatActivity {
     private static final String TAG = "InfoActivity";
+    private static final int REQUEST_CODE_SETTINGS = 10;
+    private static final int REQUEST_CODE_LIMITS = 11;
+    private static final int REQUEST_CODE_ABOUT = 12;
 
     private static String sLang;
     private Date mDate;
@@ -49,8 +52,8 @@ public class InfoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE_SETTINGS) {
+            if (resultCode == RESULT_OK) {
                 updateLocale();
             }
         }
@@ -64,11 +67,22 @@ public class InfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent, 1);
+                intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SETTINGS);
+                return true;
+
+            case R.id.action_limits:
+                intent = new Intent(this, LimitsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_LIMITS);
+                return true;
+
+            case R.id.action_about:
+                intent = new Intent(this, AboutActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ABOUT);
                 return true;
 
             default:
