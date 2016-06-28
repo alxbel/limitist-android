@@ -1,7 +1,5 @@
 package com.github.blackenwhite.costplanner.model;
 
-import com.github.blackenwhite.costplanner.controller.InfoActivity;
-
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -29,7 +27,15 @@ public class Date {
         return fmt.withLocale(mLocale).print(mLocalDate);
     }
 
-    public final LocalDate getLocalDate() {
+    public LocalDate getLocalDate() {
         return mLocalDate;
+    }
+
+    public Locale getLocale() {
+        return mLocale;
+    }
+
+    public static int getCurrentYear() {
+        return new LocalDate().getYear();
     }
 }

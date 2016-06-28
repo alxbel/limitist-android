@@ -15,14 +15,25 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.github.blackenwhite.costplanner.R;
+import com.github.blackenwhite.costplanner.model.Date;
 
 public class LimitsActivity extends AppCompatActivity {
 
+    private static final int WHOLE_YEAR_FLAG = 13;
+    private static final int JANUARY = 1;
+
     private FloatingActionButton mButtonAdd;
+    private int mSelectedMonth;
+    private int mSelectedYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // init members
+        mSelectedMonth = JANUARY;
+        mSelectedYear = Date.getCurrentYear();
+
         setContentView(R.layout.activity_limits);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.limits_toolbar);
@@ -48,7 +59,13 @@ public class LimitsActivity extends AppCompatActivity {
                 monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 monthSpinner.setAdapter(monthAdapter);
 
-                CheckBox wholeYearSwitch = (CheckBox) dialogLayout.findViewById(R.id.checkbox_for_whole_year);
+                final Spinner yearSpinner = (Spinner) dialogLayout.findViewById(R.id.year_spinner);
+                ArrayAdapter<CharSequence> yearAdapter = ArrayAdapter.createFromResource(LimitsActivity.this,
+                        R.array.years_array, android.R.layout.simple_spinner_item);
+                yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                yearSpinner.setAdapter(yearAdapter);
+
+                final CheckBox wholeYearSwitch = (CheckBox) dialogLayout.findViewById(R.id.checkbox_for_whole_year);
                 wholeYearSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -58,13 +75,18 @@ public class LimitsActivity extends AppCompatActivity {
 
                 alertDialog.setView(dialogLayout);
 
-                alertDialog.setPositiveButton("YES",
+                alertDialog.setPositiveButton(R.string.dialog_yes,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                if (wholeYearSwitch.isChecked()) {
+                                    mSelectedMonth = WHOLE_YEAR_FLAG;
+                                } else {
+
+                                }
                             }
                         });
 
-                alertDialog.setNegativeButton("NO",
+                alertDialog.setNegativeButton(R.string.dialog_cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
