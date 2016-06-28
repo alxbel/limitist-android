@@ -28,4 +28,8 @@ public class Date {
         DateTimeFormatter fmt = DateTimeFormat.forPattern(DATE_FORMAT);
         return fmt.withLocale(mLocale).print(mLocalDate);
     }
+
+    public final LocalDate getLocalDate() {
+        return mLocalDate;
+    }
 }
