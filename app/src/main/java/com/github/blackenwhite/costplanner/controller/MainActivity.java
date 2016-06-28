@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,8 +18,8 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.Locale;
 
-public class InfoActivity extends AppCompatActivity {
-    private static final String TAG = "InfoActivity";
+public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE_SETTINGS = 10;
     private static final int REQUEST_CODE_LIMITS = 11;
     private static final int REQUEST_CODE_ABOUT = 12;
@@ -33,14 +32,16 @@ public class InfoActivity extends AppCompatActivity {
         JodaTimeAndroid.init(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_info);
+        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.info_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.expenses_toolbar);
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        mDate = new Date(new Locale(SettingsActivity.getLangPref(this)));
         TextView dateLabel = (TextView) findViewById(R.id.label_date);
+
+        mDate = Date.INSTANCE;
+        mDate.setLocale(SettingsActivity.getLangPref(this));
         dateLabel.setText(mDate.toString());
     }
 
@@ -102,7 +103,7 @@ public class InfoActivity extends AppCompatActivity {
         conf.locale = locale;
         sLang = lang;
         res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, InfoActivity.class);
+        Intent refresh = new Intent(this, MainActivity.class);
         startActivity(refresh);
         finish();
     }

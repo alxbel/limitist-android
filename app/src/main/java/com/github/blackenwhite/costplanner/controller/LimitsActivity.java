@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
 
 public class LimitsActivity extends AppCompatActivity {
+    private static final String TAG = "LimitsActivity";
 
     private static final int WHOLE_YEAR_FLAG = 13;
     private static final int JANUARY = 1;
@@ -32,7 +34,7 @@ public class LimitsActivity extends AppCompatActivity {
 
         // init members
         mSelectedMonth = JANUARY;
-        mSelectedYear = Date.getCurrentYear();
+        mSelectedYear = Date.INSTANCE.getCurrentYear();
 
         setContentView(R.layout.activity_limits);
 
@@ -54,7 +56,7 @@ public class LimitsActivity extends AppCompatActivity {
                 LinearLayout dialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_limits_input_layout, null);
 
                 final Spinner monthSpinner = (Spinner) dialogLayout.findViewById(R.id.month_spinner);
-                ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(LimitsActivity.this,
+                final ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(LimitsActivity.this,
                         R.array.months_array, android.R.layout.simple_spinner_item);
                 monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 monthSpinner.setAdapter(monthAdapter);
@@ -81,7 +83,7 @@ public class LimitsActivity extends AppCompatActivity {
                                 if (wholeYearSwitch.isChecked()) {
                                     mSelectedMonth = WHOLE_YEAR_FLAG;
                                 } else {
-
+                                    Log.d(TAG, new Integer(Date.INSTANCE.getMonthIndex((String)monthSpinner.getSelectedItem())).toString());
                                 }
                             }
                         });
