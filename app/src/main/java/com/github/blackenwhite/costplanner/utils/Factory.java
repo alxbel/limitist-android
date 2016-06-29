@@ -5,9 +5,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-/**
- * Created by alexbel on 6/29/16.
- */
 public class Factory {
     public static final Spinner createSpinner(Context ctx, View view, int spinnerRes, int dataArrayRes) {
         final Spinner spinner = (Spinner) view.findViewById(spinnerRes);

@@ -8,10 +8,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Created by alexbel on 6/28/16.
- */
 public class Date {
+    public static final Date INSTANCE = new Date();
+
     private static final String TAG = "Date";
     private static final String RU_LOCALE = "ru";
     private static final int DEFAULT_MONTH_INDEX = 1;
@@ -36,15 +35,12 @@ public class Date {
         months.put("декабрь",   12);
     }
 
-
-    public static final Date INSTANCE = new Date();
+    private LocalDate mLocalDate;
+    private Locale mLocale;
 
     private Date() {
         mLocalDate = new LocalDate();
     }
-
-    private LocalDate mLocalDate;
-    private Locale mLocale;
 
     @Override
     public String toString() {
@@ -74,6 +70,10 @@ public class Date {
 
     public int getCurrentYear() {
         return mLocalDate.getYear();
+    }
+
+    public int getCurrentMonthIndex() {
+        return mLocalDate.getMonthOfYear();
     }
 
     public int getMonthIndex(String month) {

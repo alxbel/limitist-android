@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
+import com.github.blackenwhite.costplanner.providers.Settings;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         TextView dateLabel = (TextView) findViewById(R.id.label_date);
 
         mDate = Date.INSTANCE;
-        mDate.setLocale(SettingsActivity.getLangPref(this));
+        mDate.setLocale(Settings.getLangPref(this));
         dateLabel.setText(mDate.toString());
     }
 
@@ -110,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateLocale() {
         if (sLang == null) {
-            sLang = SettingsActivity.getLangPref(this);
+            sLang = Settings.getLangPref(this);
             setLocale(sLang);
             return;
         }
-        if (!sLang.equalsIgnoreCase(SettingsActivity.getLangPref(this))) {
-            sLang = SettingsActivity.getLangPref(this);
+        if (!sLang.equalsIgnoreCase(Settings.getLangPref(this))) {
+            sLang = Settings.getLangPref(this);
             setLocale(sLang);
         }
     }
