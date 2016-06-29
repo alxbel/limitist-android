@@ -16,7 +16,7 @@
     <string name="toolbar_about">О программе</string>
     <string name="dialog_title_limits_input">Ввод ограничений</string>
     <string name="dialog_message_limits_input">Введите месяц и год:</string>
-    <string name="for_whole_year">Для всего года</string>
-    <string name="dialog_yes">Да</string>
+    <string name="whole_year">Весь год</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Отмена</string>
 </resources>

@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -17,6 +16,7 @@ import android.widget.Spinner;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
+import com.github.blackenwhite.costplanner.utils.Factory;
 
 public class LimitsActivity extends AppCompatActivity {
     private static final String TAG = "LimitsActivity";
@@ -55,19 +55,15 @@ public class LimitsActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 LinearLayout dialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_limits_input_layout, null);
 
-                final Spinner monthSpinner = (Spinner) dialogLayout.findViewById(R.id.month_spinner);
-                final ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(LimitsActivity.this,
-                        R.array.months_array, android.R.layout.simple_spinner_item);
-                monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                monthSpinner.setAdapter(monthAdapter);
+                final Spinner monthSpinner = Factory.createSpinner(
+                        LimitsActivity.this, dialogLayout,
+                        R.id.month_spinner, R.array.months_array);
 
-                final Spinner yearSpinner = (Spinner) dialogLayout.findViewById(R.id.year_spinner);
-                ArrayAdapter<CharSequence> yearAdapter = ArrayAdapter.createFromResource(LimitsActivity.this,
-                        R.array.years_array, android.R.layout.simple_spinner_item);
-                yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                yearSpinner.setAdapter(yearAdapter);
+                final Spinner yearSpinner = Factory.createSpinner(
+                        LimitsActivity.this, dialogLayout,
+                        R.id.year_spinner, R.array.years_array);
 
-                final CheckBox wholeYearSwitch = (CheckBox) dialogLayout.findViewById(R.id.checkbox_for_whole_year);
+                final CheckBox wholeYearSwitch = (CheckBox) dialogLayout.findViewById(R.id.checkbox_whole_year);
                 wholeYearSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -77,7 +73,7 @@ public class LimitsActivity extends AppCompatActivity {
 
                 alertDialog.setView(dialogLayout);
 
-                alertDialog.setPositiveButton(R.string.dialog_yes,
+                alertDialog.setPositiveButton(R.string.dialog_ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (wholeYearSwitch.isChecked()) {
