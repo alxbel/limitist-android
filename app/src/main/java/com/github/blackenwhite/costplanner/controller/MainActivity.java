@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
-import com.github.blackenwhite.costplanner.providers.Settings;
+import com.github.blackenwhite.costplanner.providers.files.Settings;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 

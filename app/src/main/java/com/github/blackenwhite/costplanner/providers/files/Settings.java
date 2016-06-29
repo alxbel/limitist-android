@@ -1,4 +1,4 @@
-package com.github.blackenwhite.costplanner.providers;
+package com.github.blackenwhite.costplanner.providers.files;
 
 import android.content.Context;
 import android.content.SharedPreferences;
