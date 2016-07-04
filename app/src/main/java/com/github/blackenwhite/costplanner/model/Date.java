@@ -1,6 +1,7 @@
 package com.github.blackenwhite.costplanner.model;
 
 import org.joda.time.LocalDate;
+import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -90,5 +91,25 @@ public class Date {
             }
         } catch (IllegalArgumentException e) {}
         return index;
+    }
+
+    public String getMonth(int index) {
+        String month = "";
+        try {
+            if (mLocale.toString().equals(RU_LOCALE)) {
+                for (Map.Entry<String, Integer> entry : months.entrySet()) {
+                    if (entry.getValue() == index) {
+                        month = entry.getKey();
+                        break;
+                    }
+                }
+            } else {
+                YearMonth ym = new YearMonth(1990, index);
+                month = ym.monthOfYear().getAsText(mLocale);
+            }
+        } catch (IllegalArgumentException e) {}
+
+        char c = month.charAt(0);
+        return new StringBuilder().append(Character.toUpperCase(c)).append(month.substring(1)).toString();
     }
 }
