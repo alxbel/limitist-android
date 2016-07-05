@@ -1,4 +1,4 @@
-package com.github.blackenwhite.costplanner.providers.database;
+package com.github.blackenwhite.costplanner.provider.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -77,6 +77,10 @@ public class Date {
         return mLocalDate.getMonthOfYear();
     }
 
+    public String getCurrentMonth() {
+        return getMonth(mLocalDate.getMonthOfYear());
+    }
+
     public int getMonthIndex(String month) {
         DateTimeFormatter dtf =
                 DateTimeFormat.forPattern(MONTH_FORMAT).withLocale(mLocale);

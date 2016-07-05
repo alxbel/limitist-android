@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.github.blackenwhite.costplanner.R;
-import com.github.blackenwhite.costplanner.providers.files.Settings;
+import com.github.blackenwhite.costplanner.provider.file.Settings;
 
 public class SettingsActivity extends AppCompatActivity {
 

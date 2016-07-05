@@ -16,7 +16,7 @@ import android.widget.Spinner;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
-import com.github.blackenwhite.costplanner.utils.Factory;
+import com.github.blackenwhite.costplanner.util.Factory;
 
 public class LimitsActivity extends AppCompatActivity {
     private static final String TAG = "LimitsActivity";

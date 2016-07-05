@@ -1,4 +1,4 @@
-package com.github.blackenwhite.costplanner.utils;
+package com.github.blackenwhite.costplanner.util;
 
 import android.content.Context;
 import android.view.View;

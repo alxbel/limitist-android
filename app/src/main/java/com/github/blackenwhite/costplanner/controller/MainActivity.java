@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
-import com.github.blackenwhite.costplanner.providers.files.Settings;
+import com.github.blackenwhite.costplanner.provider.file.Settings;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -30,20 +30,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        JodaTimeAndroid.init(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        JodaTimeAndroid.init(this);
+        mDate = Date.INSTANCE;
+        mDate.setLocale(Settings.getLangPref(this));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.expenses_toolbar);
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
         TextView dateLabel = (TextView) findViewById(R.id.label_date);
-
-        mDate = Date.INSTANCE;
-        mDate.setLocale(Settings.getLangPref(this));
         dateLabel.setText(mDate.toString());
+        TextView monthLabel = (TextView) findViewById(R.id.label_month);
+        monthLabel.setText(mDate.getCurrentMonth());
     }
 
     @Override
