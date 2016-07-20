@@ -16,6 +16,7 @@ import android.widget.Spinner;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
+import com.github.blackenwhite.costplanner.model.Limit;
 import com.github.blackenwhite.costplanner.util.Factory;
 
 public class LimitsActivity extends AppCompatActivity {
@@ -76,10 +77,18 @@ public class LimitsActivity extends AppCompatActivity {
                 alertDialog.setPositiveButton(R.string.dialog_ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                Integer selectedYear = Date.INSTANCE.getCurrentYear();
+                                Integer selectedMonthIndice = 1;
+                                try {
+                                    selectedYear = new Integer(yearSpinner.getSelectedItem().toString());
+                                    selectedMonthIndice = new Integer(Date.INSTANCE.getMonthIndex((String)monthSpinner.getSelectedItem()));
+                                } catch (NumberFormatException e){}
+
                                 if (wholeYearSwitch.isChecked()) {
                                     mSelectedMonth = WHOLE_YEAR_FLAG;
                                 } else {
-                                    Log.d(TAG, new Integer(Date.INSTANCE.getMonthIndex((String)monthSpinner.getSelectedItem())).toString());
+                                    Limit limit = new Limit(selectedYear, selectedMonthIndice, 10000);
+                                    Log.d(TAG, String.format("%s", limit));
                                 }
                             }
                         });

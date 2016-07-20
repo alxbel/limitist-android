@@ -18,22 +18,22 @@ public class Date {
     private static final String MONTH_FORMAT = "MMMM";
     private static final String DATE_FORMAT = "E dd.MM.yyyy";
 
-    private static Map<String, Integer> months;
+    private static Map<String, Integer> sMonths;
     static {
-        months = new HashMap<>();
+        sMonths = new HashMap<>();
 
-        months.put("январь",    1);
-        months.put("февраль",   2);
-        months.put("март",      3);
-        months.put("апрель",    4);
-        months.put("май",       5);
-        months.put("июнь",      6);
-        months.put("июль",      7);
-        months.put("август",    8);
-        months.put("сентябрь",  9);
-        months.put("октябрь",   10);
-        months.put("ноябрь",    11);
-        months.put("декабрь",   12);
+        sMonths.put("январь",    1);
+        sMonths.put("февраль",   2);
+        sMonths.put("март",      3);
+        sMonths.put("апрель",    4);
+        sMonths.put("май",       5);
+        sMonths.put("июнь",      6);
+        sMonths.put("июль",      7);
+        sMonths.put("август",    8);
+        sMonths.put("сентябрь",  9);
+        sMonths.put("октябрь",   10);
+        sMonths.put("ноябрь",    11);
+        sMonths.put("декабрь",   12);
     }
 
     private LocalDate mLocalDate;
@@ -88,7 +88,7 @@ public class Date {
         int index = DEFAULT_MONTH_INDEX;
         try {
             if (mLocale.toString().equals(RU_LOCALE)) {
-                index = months.get(month.toLowerCase());
+                index = sMonths.get(month.toLowerCase());
             } else {
                 LocalDate d = dtf.parseLocalDate(month);
                 index = d.getMonthOfYear();
@@ -98,10 +98,10 @@ public class Date {
     }
 
     public String getMonth(int index) {
-        String month = "";
+        String month = "month";
         try {
             if (mLocale.toString().equals(RU_LOCALE)) {
-                for (Map.Entry<String, Integer> entry : months.entrySet()) {
+                for (Map.Entry<String, Integer> entry : sMonths.entrySet()) {
                     if (entry.getValue() == index) {
                         month = entry.getKey();
                         break;
@@ -111,7 +111,7 @@ public class Date {
                 YearMonth ym = new YearMonth(1990, index);
                 month = ym.monthOfYear().getAsText(mLocale);
             }
-        } catch (IllegalArgumentException e) {}
+        } catch (IllegalArgumentException e) { e.printStackTrace(); }
 
         char c = month.charAt(0);
         return new StringBuilder().append(Character.toUpperCase(c)).append(month.substring(1)).toString();
