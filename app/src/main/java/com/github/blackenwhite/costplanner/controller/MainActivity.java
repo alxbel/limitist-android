@@ -1,5 +1,6 @@
 package com.github.blackenwhite.costplanner.controller;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ABOUT = 12;
 
     private static String sLang;
-    private Date mDate;
+    private static Context sContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +36,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         JodaTimeAndroid.init(this);
-        mDate = Date.INSTANCE;
-        mDate.setLocale(Settings.getLangPref(this));
+        sContext = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.expenses_toolbar);
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
         TextView dateLabel = (TextView) findViewById(R.id.label_date);
-        dateLabel.setText(mDate.toString());
+        dateLabel.setText(Date.get().toString());
         TextView monthLabel = (TextView) findViewById(R.id.label_month);
-        monthLabel.setText(mDate.getCurrentMonth());
+        monthLabel.setText(Date.get().getCurrentMonth());
+
+        Intent intent = new Intent(this, LimitsActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_LIMITS);
     }
 
     @Override
@@ -97,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static Context getContext() {
+        return sContext;
+    }
+
     private void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Resources res = getResources();
@@ -105,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         conf.locale = locale;
         sLang = lang;
         res.updateConfiguration(conf, dm);
+        Date.get().setLocale(Settings.getLangPref(this));
         Intent refresh = new Intent(this, MainActivity.class);
         startActivity(refresh);
         finish();

@@ -1,5 +1,8 @@
 package com.github.blackenwhite.costplanner.model;
 
+import com.github.blackenwhite.costplanner.controller.MainActivity;
+import com.github.blackenwhite.costplanner.provider.file.Settings;
+
 import org.joda.time.LocalDate;
 import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
@@ -10,7 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Date {
-    public static final Date INSTANCE = new Date();
+    private static Date sDate;
 
     private static final String TAG = "Date";
     private static final String RU_LOCALE = "ru";
@@ -38,6 +41,14 @@ public class Date {
 
     private LocalDate mLocalDate;
     private Locale mLocale;
+
+    public static Date get() {
+        if (sDate == null) {
+            sDate = new Date();
+            sDate.setLocale(Settings.getLangPref(MainActivity.getContext()));
+        }
+        return sDate;
+    }
 
     private Date() {
         mLocalDate = new LocalDate();
@@ -93,7 +104,7 @@ public class Date {
                 LocalDate d = dtf.parseLocalDate(month);
                 index = d.getMonthOfYear();
             }
-        } catch (IllegalArgumentException e) {}
+        } catch (IllegalArgumentException ignored) {}
         return index;
     }
 
@@ -114,6 +125,6 @@ public class Date {
         } catch (IllegalArgumentException e) { e.printStackTrace(); }
 
         char c = month.charAt(0);
-        return new StringBuilder().append(Character.toUpperCase(c)).append(month.substring(1)).toString();
+        return String.valueOf(Character.toUpperCase(c)) + month.substring(1);
     }
 }

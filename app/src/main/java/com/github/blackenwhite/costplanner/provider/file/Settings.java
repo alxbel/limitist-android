@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.github.blackenwhite.costplanner.R;
+import com.github.blackenwhite.costplanner.controller.MainActivity;
+
+import java.util.Locale;
 
 public class Settings {
     public static String getLangPref(Context ctx) {
@@ -20,5 +23,9 @@ public class Settings {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(ctx.getString(R.string.lang), newLang);
         editor.commit();
+    }
+
+    public static Locale getLocale() {
+        return MainActivity.getContext().getResources().getConfiguration().locale;
     }
 }

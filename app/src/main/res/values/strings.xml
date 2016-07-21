@@ -15,8 +15,17 @@
     <string name="action_about">О программе</string>
     <string name="toolbar_about">О программе</string>
     <string name="dialog_title_limits_input">Ввод ограничений</string>
-    <string name="dialog_message_limits_input">Введите месяц и год:</string>
+    <string name="dialog_message_limits_input">Введите месяц, год и лимит:</string>
     <string name="whole_year">Весь год</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Отмена</string>
+    <string name="limit_label">Лимит:</string>
+    <string formatted="false" name="fmt_record_exists">Запись \"%s %d\" существует </string>
+    <string name="record_added">Запись добавлена</string>
+    <string formatted="false" name="fmt_question_update_record">
+        Обновить ограничение?\n\n%-10s%5s%d\n%-10s%5s%d
+    </string>
+    <string name="record_no_changes">Чтобы обновить запись, введите новый лимит</string>
+    <string name="current_lim">Текущее:</string>
+    <string name="new_lim">Новое:</string>
 </resources>

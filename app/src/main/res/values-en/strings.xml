@@ -15,8 +15,17 @@
     <string name="action_about">About</string>
     <string name="toolbar_about">About</string>
     <string name="dialog_title_limits_input">Limits input</string>
-    <string name="dialog_message_limits_input">Enter month and year:</string>
+    <string name="dialog_message_limits_input">Enter month, year and limit:</string>
     <string name="whole_year">Whole year</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="limit_label">Limit:</string>
+    <string formatted="false" name="fmt_record_exists">Record \"%s %d\" exists</string>
+    <string name="record_added">Record added</string>
+    <string formatted="false" name="fmt_question_update_record">
+        Update limit?\n\n%-10s%5s%d\n%-10s%5s%d
+    </string>
+    <string name="record_no_changes">To update record, enter new limit value</string>
+    <string name="current_lim">Current:</string>
+    <string name="new_lim">New:</string>
 </resources>
