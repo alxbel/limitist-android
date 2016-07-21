@@ -15,9 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name=".controller.MainActivity">-->
-        <!--</activity>-->
         <activity
             android:name=".controller.SettingsActivity"
             android:parentActivityName=".controller.MainActivity">
@@ -26,12 +23,6 @@
             android:name=".controller.LimitsActivity"
             android:parentActivityName=".controller.MainActivity">
         </activity>
-        <!--<activity android:name=".controller.LimitsActivity">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
         <activity
             android:name=".controller.AboutActivity"
             android:parentActivityName=".controller.MainActivity">
