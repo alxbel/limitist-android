@@ -27,6 +27,7 @@ public class LimitsActivity extends AppCompatActivity {
 
     private static final int WHOLE_YEAR_FLAG = 13;
     private static final int JANUARY = 1;
+    private static final int INCORRECT_VALUE = -1;
 
     private LimitStorage mLimitStorage;
     private FloatingActionButton mButtonAdd;
@@ -98,24 +99,28 @@ public class LimitsActivity extends AppCompatActivity {
                             mLimitValue = Integer.valueOf(limitInput.getText().toString());
                         } catch (NumberFormatException | NullPointerException e){
                             e.printStackTrace();
-                            mLimitValue = 0;
+                            mLimitValue = INCORRECT_VALUE;
+                            MessageManager.showMessage(R.string.toast_incorrect_value);
                         }
-                        if (wholeYearSwitch.isChecked()) {
-                            mSelectedMonthIndex = WHOLE_YEAR_FLAG;
-                        } else {
-                            Limit limit = new Limit(mSelectedYear, mSelectedMonthIndex, mLimitValue);
-                            Limit old = mLimitStorage.addLimit(limit);
-                            if (old != null) {
-                                if (!old.equals(limit)) {
-                                    getUpdLimitConfirmDialog(old, limit).show();
-                                } else {
-                                    MessageManager.showMessage(R.string.record_no_changes);
-                                }
+
+                        if (mLimitValue != INCORRECT_VALUE) {
+                            if (wholeYearSwitch.isChecked()) {
+                                mSelectedMonthIndex = WHOLE_YEAR_FLAG;
                             } else {
-                                Log.d(TAG, String.format("%s", limit));
-                                MessageManager.showMessage(R.string.record_added);
+                                Limit limit = new Limit(mSelectedYear, mSelectedMonthIndex, mLimitValue);
+                                Limit old = mLimitStorage.addLimit(limit);
+                                if (old != null) {
+                                    if (!old.equals(limit)) {
+                                        getUpdLimitConfirmDialog(old, limit).show();
+                                    } else {
+                                        MessageManager.showMessage(R.string.toast_record_no_changes);
+                                    }
+                                } else {
+                                    Log.d(TAG, String.format("%s", limit));
+                                    MessageManager.showMessage(R.string.toast_record_added);
+                                    mLimitStorage.printAllLimits();
+                                }
                             }
-                            mLimitStorage.printAllLimits();
                         }
                     }
                 });
@@ -124,6 +129,7 @@ public class LimitsActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        MessageManager.showMessage(R.string.toast_cancelled);
                     }
                 });
 
@@ -139,13 +145,15 @@ public class LimitsActivity extends AppCompatActivity {
 
         alertDialog.setMessage(String.format(
                 MessageManager.getString(R.string.fmt_question_update_record),
-                MessageManager.getString(R.string.current_lim), " ", old.getLimVal(),
-                MessageManager.getString(R.string.new_lim), " ", updated.getLimVal()));
+                MessageManager.getString(R.string.current_lim), " ", old.getLimitMonthly(),
+                MessageManager.getString(R.string.new_lim), " ", updated.getLimitMonthly()));
 
         alertDialog.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mLimitStorage.updateLimit(updated);
+                MessageManager.showMessage(R.string.toast_record_updated);
+                mLimitStorage.printAllLimits();
             }
         });
 
@@ -153,6 +161,7 @@ public class LimitsActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                MessageManager.showMessage(R.string.toast_cancelled);
             }
         });
 

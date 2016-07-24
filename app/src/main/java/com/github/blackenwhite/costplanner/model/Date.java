@@ -1,8 +1,9 @@
 package com.github.blackenwhite.costplanner.model;
 
 import com.github.blackenwhite.costplanner.controller.MainActivity;
-import com.github.blackenwhite.costplanner.provider.file.Settings;
+import com.github.blackenwhite.costplanner.dao.file.Settings;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
@@ -42,16 +43,16 @@ public class Date {
     private LocalDate mLocalDate;
     private Locale mLocale;
 
+    private Date() {
+        mLocalDate = new LocalDate();
+    }
+
     public static Date get() {
         if (sDate == null) {
             sDate = new Date();
             sDate.setLocale(Settings.getLangPref(MainActivity.getContext()));
         }
         return sDate;
-    }
-
-    private Date() {
-        mLocalDate = new LocalDate();
     }
 
     @Override
@@ -126,5 +127,9 @@ public class Date {
 
         char c = month.charAt(0);
         return String.valueOf(Character.toUpperCase(c)) + month.substring(1);
+    }
+
+    public int getDaysInMonth(int year, int month) {
+        return new DateTime(year, month, 14, 12, 0, 0, 000).dayOfMonth().getMaximumValue();
     }
 }

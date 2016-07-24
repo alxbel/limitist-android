@@ -21,11 +21,14 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="limit_label">Limit:</string>
     <string formatted="false" name="fmt_record_exists">Record \"%s %d\" exists</string>
-    <string name="record_added">Record added</string>
+    <string name="toast_record_added">Record added</string>
     <string formatted="false" name="fmt_question_update_record">
         Update limit?\n\n%-10s%5s%d\n%-10s%5s%d
     </string>
-    <string name="record_no_changes">To update record, enter new limit value</string>
+    <string name="toast_record_no_changes">To update record, enter new limit value</string>
     <string name="current_lim">Current:</string>
     <string name="new_lim">New:</string>
+    <string name="toast_incorrect_value">Incorrect value</string>
+    <string name="toast_record_updated">Record updated</string>
+    <string name="toast_cancelled">Cancelled</string>
 </resources>

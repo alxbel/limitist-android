@@ -1,35 +1,30 @@
 package com.github.blackenwhite.costplanner.model;
 
-import com.github.blackenwhite.costplanner.provider.file.Settings;
+import com.github.blackenwhite.costplanner.dao.file.Settings;
 
 
 public class Limit {
     private String mId;
     private int mMonth;
     private int mYear;
-    private int mLimVal;
+    private int mLimitMonthly;
+    private int[] mLimitDailyArray;
 
-    public Limit(String id) {
-        mId = id;
-    }
+    public Limit(){}
 
-    public Limit(int year, int month, int limVal) {
+    public Limit(int year, int month, int limitMonthly) {
         mId = String.format("%d%d", year, month);
         mYear = year;
         mMonth = month;
-        mLimVal = limVal;
-    }
-
-    public Limit(String id, int year, int month, int limVal) {
-        mId = id;
-        mLimVal = limVal;
-        mMonth = month;
-        mYear = year;
+        mLimitMonthly = limitMonthly;
+        setupDailyLimitArray();
     }
 
     @Override
     public String toString() {
-        return String.format(Settings.getLocale(), "[id=%s] %s %d: %d", mId, Date.get().getMonth(mMonth), mYear, mLimVal);
+        return String.format(Settings.getLocale(),
+                "[id=%s] %s %d m:%d",
+                mId, Date.get().getMonth(mMonth), mYear, mLimitMonthly);
     }
 
     @Override
@@ -41,7 +36,7 @@ public class Limit {
 
         if (mMonth != limit.mMonth) return false;
         if (mYear != limit.mYear) return false;
-        if (mLimVal != limit.mLimVal) return false;
+        if (mLimitMonthly != limit.mLimitMonthly) return false;
         return mId != null ? mId.equals(limit.mId) : limit.mId == null;
     }
 
@@ -53,12 +48,12 @@ public class Limit {
         mId = id;
     }
 
-    public int getLimVal() {
-        return mLimVal;
+    public int getLimitMonthly() {
+        return mLimitMonthly;
     }
 
-    public void setLimVal(int limVal) {
-        mLimVal = limVal;
+    public void setLimitMonthly(int limitMonthly) {
+        mLimitMonthly = limitMonthly;
     }
 
     public int getMonth() {
@@ -75,5 +70,14 @@ public class Limit {
 
     public void setYear(int year) {
         mYear = year;
+    }
+
+    private void setupDailyLimitArray() {
+        final int days = Date.get().getDaysInMonth(mYear, mMonth);
+        final Integer limitDaily = mLimitMonthly / days;
+        mLimitDailyArray = new int[days];
+        for (int i = 0; i < mLimitDailyArray.length; i++) {
+            mLimitDailyArray[i] = limitDaily;
+        }
     }
 }

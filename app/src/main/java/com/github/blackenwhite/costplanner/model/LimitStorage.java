@@ -9,9 +9,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.blackenwhite.costplanner.provider.database.LimitCursorWrapper;
-import com.github.blackenwhite.costplanner.provider.database.LimitDbHelper;
-import com.github.blackenwhite.costplanner.provider.database.LimitDbSchema.LimitTable;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitCursorWrapper;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbHelper;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitMonthlyTable;
 
 public class LimitStorage {
     public static final String TAG = LimitStorage.class.getSimpleName();
@@ -46,15 +46,15 @@ public class LimitStorage {
             return old;
         } else {
             ContentValues values = getContentValues(limit);
-            mDatabase.insert(LimitTable.NAME, null, values);
+            mDatabase.insert(LimitMonthlyTable.NAME, null, values);
         }
         return null;
     }
 
     public void updateLimit(Limit limit) {
         ContentValues values = getContentValues(limit);
-        mDatabase.update(LimitTable.NAME, values,
-                LimitTable.Cols.ID + " = ?",
+        mDatabase.update(LimitMonthlyTable.NAME, values,
+                LimitMonthlyTable.Cols.ID + " = ?",
                 new String[]{limit.getId()});
     }
 
@@ -78,7 +78,7 @@ public class LimitStorage {
 
     public Limit getLimit(String id) {
         LimitCursorWrapper cursor = queryLimits(
-                LimitTable.Cols.ID + " = ?",
+                LimitMonthlyTable.Cols.ID + " = ?",
                 new String[]{id}
         );
 
@@ -95,7 +95,7 @@ public class LimitStorage {
 
     private LimitCursorWrapper queryLimits(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
-                LimitTable.NAME,
+                LimitMonthlyTable.NAME,
                 null,
                 whereClause,
                 whereArgs,
@@ -109,10 +109,10 @@ public class LimitStorage {
 
     private static ContentValues getContentValues(Limit limit) {
         ContentValues values = new ContentValues();
-        values.put(LimitTable.Cols.ID, limit.getId());
-        values.put(LimitTable.Cols.YEAR, limit.getYear());
-        values.put(LimitTable.Cols.MONTH, limit.getMonth());
-        values.put(LimitTable.Cols.LIMIT_VALUE, limit.getLimVal());
+        values.put(LimitMonthlyTable.Cols.ID, limit.getId());
+        values.put(LimitMonthlyTable.Cols.YEAR, limit.getYear());
+        values.put(LimitMonthlyTable.Cols.MONTH, limit.getMonth());
+        values.put(LimitMonthlyTable.Cols.LIMIT_MONTHLY, limit.getLimitMonthly());
         return values;
     }
 }

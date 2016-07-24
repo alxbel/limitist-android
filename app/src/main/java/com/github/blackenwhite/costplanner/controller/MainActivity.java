@@ -8,15 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
-import com.github.blackenwhite.costplanner.provider.file.Settings;
+import com.github.blackenwhite.costplanner.dao.file.Settings;
 
 import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.DateTime;
 
 import java.util.Locale;
 
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         JodaTimeAndroid.init(this);
         sContext = this;
+
+        Log.d(TAG, Integer.valueOf(new DateTime(2000, 2, 14, 12, 0, 0, 000).dayOfMonth().getMaximumValue()).toString());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.expenses_toolbar);
         toolbar.setTitle(R.string.app_name);
