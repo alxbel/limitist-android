@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.Date;
@@ -30,7 +31,10 @@ public class LimitsActivity extends AppCompatActivity {
     private static final int INCORRECT_VALUE = -1;
 
     private LimitStorage mLimitStorage;
+
+    private TextView mYearLabel;
     private FloatingActionButton mButtonAdd;
+
     private int mLimitValue;
     private int mSelectedMonthIndex;
     private int mSelectedYear;
@@ -52,6 +56,10 @@ public class LimitsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+        mYearLabel = (TextView) findViewById(R.id.label_limits_year);
+        mYearLabel.setText(Integer.valueOf(Date.get().getCurrentYear()).toString());
 
         mButtonAdd = (FloatingActionButton) findViewById(R.id.button_add);
         mButtonAdd.setOnClickListener(new View.OnClickListener() {

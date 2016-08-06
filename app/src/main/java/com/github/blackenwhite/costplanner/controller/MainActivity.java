@@ -19,8 +19,6 @@ import com.github.blackenwhite.costplanner.dao.file.Settings;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import org.joda.time.DateTime;
-
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,19 +39,18 @@ public class MainActivity extends AppCompatActivity {
         JodaTimeAndroid.init(this);
         sContext = this;
 
-        Log.d(TAG, Integer.valueOf(new DateTime(2000, 2, 14, 12, 0, 0, 000).dayOfMonth().getMaximumValue()).toString());
+//        Log.d(TAG, Integer.valueOf(new DateTime(2000, 2, 14, 12, 0, 0, 000).dayOfMonth().getMaximumValue()).toString());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.expenses_toolbar);
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        TextView dateLabel = (TextView) findViewById(R.id.label_date);
+        TextView dateLabel = (TextView) findViewById(R.id.label_main_date);
         dateLabel.setText(Date.get().toString());
         TextView monthLabel = (TextView) findViewById(R.id.label_month);
         monthLabel.setText(Date.get().getCurrentMonth());
 
-        Intent intent = new Intent(this, LimitsActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_LIMITS);
+        startLimitsActivity();
     }
 
     @Override
@@ -134,5 +131,13 @@ public class MainActivity extends AppCompatActivity {
             sLang = Settings.getLangPref(this);
             setLocale(sLang);
         }
+    }
+
+    private void startLimitsActivity() {
+        for (String month : Date.get().getMonthNames()) {
+            Log.v(TAG, month);
+        }
+        Intent intent = new Intent(this, LimitsActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_LIMITS);
     }
 }

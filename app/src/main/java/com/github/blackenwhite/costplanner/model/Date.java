@@ -2,50 +2,60 @@ package com.github.blackenwhite.costplanner.model;
 
 import com.github.blackenwhite.costplanner.controller.MainActivity;
 import com.github.blackenwhite.costplanner.dao.file.Settings;
+import com.github.blackenwhite.costplanner.util.BiMap;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class Date {
     private static Date sDate;
 
     private static final String TAG = "Date";
+    private static final String ERROR_MONTH_NAME = "#error_month_name#";
     private static final String RU_LOCALE = "ru";
     private static final int DEFAULT_MONTH_INDEX = 1;
     private static final String MONTH_FORMAT = "MMMM";
     private static final String DATE_FORMAT = "E dd.MM.yyyy";
 
-    private static Map<String, Integer> sMonths;
+    private static final BiMap<Integer, String> sMonthCollRu = new BiMap<>();
+    private static final BiMap<Integer, String> sMonthCollEn = new BiMap<>();
     static {
-        sMonths = new HashMap<>();
+        sMonthCollRu.put(1, "январь");
+        sMonthCollRu.put(2, "февраль");
+        sMonthCollRu.put(3, "март");
+        sMonthCollRu.put(4, "апрель");
+        sMonthCollRu.put(5, "май");
+        sMonthCollRu.put(6, "июнь");
+        sMonthCollRu.put(7, "июль");
+        sMonthCollRu.put(8, "август");
+        sMonthCollRu.put(9, "сентябрь");
+        sMonthCollRu.put(10, "октябрь");
+        sMonthCollRu.put(11, "ноябрь");
+        sMonthCollRu.put(12, "декабрь");
 
-        sMonths.put("январь",    1);
-        sMonths.put("февраль",   2);
-        sMonths.put("март",      3);
-        sMonths.put("апрель",    4);
-        sMonths.put("май",       5);
-        sMonths.put("июнь",      6);
-        sMonths.put("июль",      7);
-        sMonths.put("август",    8);
-        sMonths.put("сентябрь",  9);
-        sMonths.put("октябрь",   10);
-        sMonths.put("ноябрь",    11);
-        sMonths.put("декабрь",   12);
+
+        sMonthCollEn.put(1, "january");
+        sMonthCollEn.put(2, "february");
+        sMonthCollEn.put(3, "march");
+        sMonthCollEn.put(4, "april");
+        sMonthCollEn.put(5, "may");
+        sMonthCollEn.put(6, "june");
+        sMonthCollEn.put(7, "july");
+        sMonthCollEn.put(8, "august");
+        sMonthCollEn.put(9, "september");
+        sMonthCollEn.put(10, "october");
+        sMonthCollEn.put(11, "november");
+        sMonthCollEn.put(12, "december");
     }
 
-    private LocalDate mLocalDate;
+    private LocalDate mLocalDate = new LocalDate();
     private Locale mLocale;
 
-    private Date() {
-        mLocalDate = new LocalDate();
-    }
+    private Date() {}
 
     public static Date get() {
         if (sDate == null) {
@@ -94,42 +104,39 @@ public class Date {
     }
 
     public int getMonthIndex(String month) {
-        DateTimeFormatter dtf =
-                DateTimeFormat.forPattern(MONTH_FORMAT).withLocale(mLocale);
-
-        int index = DEFAULT_MONTH_INDEX;
         try {
             if (mLocale.toString().equals(RU_LOCALE)) {
-                index = sMonths.get(month.toLowerCase());
+                return sMonthCollRu.getKey(month.toLowerCase());
             } else {
-                LocalDate d = dtf.parseLocalDate(month);
-                index = d.getMonthOfYear();
+                return sMonthCollEn.getKey(month.toLowerCase());
             }
-        } catch (IllegalArgumentException ignored) {}
-        return index;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return DEFAULT_MONTH_INDEX;
+        }
     }
 
     public String getMonth(int index) {
-        String month = "month";
         try {
+            String month;
             if (mLocale.toString().equals(RU_LOCALE)) {
-                for (Map.Entry<String, Integer> entry : sMonths.entrySet()) {
-                    if (entry.getValue() == index) {
-                        month = entry.getKey();
-                        break;
-                    }
-                }
+                month = sMonthCollRu.getValue(index);
             } else {
-                YearMonth ym = new YearMonth(1990, index);
-                month = ym.monthOfYear().getAsText(mLocale);
+                month = sMonthCollEn.getValue(index);
             }
-        } catch (IllegalArgumentException e) { e.printStackTrace(); }
-
-        char c = month.charAt(0);
-        return String.valueOf(Character.toUpperCase(c)) + month.substring(1);
+            char c = month.charAt(0);
+            return String.valueOf(Character.toUpperCase(c)) + month.substring(1);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return ERROR_MONTH_NAME;
+        }
     }
 
     public int getDaysInMonth(int year, int month) {
         return new DateTime(year, month, 14, 12, 0, 0, 000).dayOfMonth().getMaximumValue();
+    }
+
+    public String[] getMonthNames() {
+        return sMonthCollRu.getValues().toArray(new String[sMonthCollRu.size()]);
     }
 }
