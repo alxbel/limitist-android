@@ -24,7 +24,7 @@ public class Limit {
     public String toString() {
         return String.format(Settings.getLocale(),
                 "[id=%s] %s %d m:%d",
-                mId, Date.get().getMonth(mMonth), mYear, mLimitMonthly);
+                mId, DateManager.get().getMonth(mMonth), mYear, mLimitMonthly);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Limit {
     }
 
     private void setupDailyLimitArray() {
-        final int days = Date.get().getDaysInMonth(mYear, mMonth);
+        final int days = DateManager.get().getDaysInMonth(mYear, mMonth);
         final Integer limitDaily = mLimitMonthly / days;
         mLimitDailyArray = new int[days];
         for (int i = 0; i < mLimitDailyArray.length; i++) {

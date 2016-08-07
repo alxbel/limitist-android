@@ -9,15 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
-import com.github.blackenwhite.costplanner.model.Date;
+import com.github.blackenwhite.costplanner.model.DateManager;
 import com.github.blackenwhite.costplanner.model.Limit;
 import com.github.blackenwhite.costplanner.model.LimitStorage;
 import com.github.blackenwhite.costplanner.util.Factory;
@@ -33,6 +35,8 @@ public class LimitsActivity extends AppCompatActivity {
     private LimitStorage mLimitStorage;
 
     private TextView mYearLabel;
+    private ListView mMonthListView;
+    private ArrayAdapter mMonthAdapter;
     private FloatingActionButton mButtonAdd;
 
     private int mLimitValue;
@@ -46,7 +50,7 @@ public class LimitsActivity extends AppCompatActivity {
         // init members
         mLimitValue = 0;
         mSelectedMonthIndex = JANUARY;
-        mSelectedYear = Date.get().getCurrentYear();
+        mSelectedYear = DateManager.get().getCurrentYear();
         mLimitStorage = LimitStorage.get(getApplicationContext());
 
         setContentView(R.layout.activity_limits);
@@ -58,8 +62,12 @@ public class LimitsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-        mYearLabel = (TextView) findViewById(R.id.label_limits_year);
-        mYearLabel.setText(Integer.valueOf(Date.get().getCurrentYear()).toString());
+        mYearLabel = (TextView) findViewById(R.id.limits_label_year);
+        mYearLabel.setText(Integer.valueOf(DateManager.get().getCurrentYear()).toString());
+
+        mMonthListView = (ListView)findViewById(R.id.limits_list_months);
+        mMonthAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, DateManager.get().getMonthNames());
+        mMonthListView.setAdapter(mMonthAdapter);
 
         mButtonAdd = (FloatingActionButton) findViewById(R.id.button_add);
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +89,7 @@ public class LimitsActivity extends AppCompatActivity {
 
         final Spinner monthSpinner = Factory.createSpinner(
                 LimitsActivity.this, dialogLayout,
-                R.id.month_spinner, R.array.months_array);
+                R.id.month_spinner, R.array.month_array);
 
         final Spinner yearSpinner = Factory.createSpinner(
                 LimitsActivity.this, dialogLayout,
@@ -103,7 +111,7 @@ public class LimitsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             mSelectedYear = Integer.valueOf(yearSpinner.getSelectedItem().toString());
-                            mSelectedMonthIndex = Date.get().getMonthIndex((String)monthSpinner.getSelectedItem());
+                            mSelectedMonthIndex = DateManager.get().getMonthIndex((String)monthSpinner.getSelectedItem());
                             mLimitValue = Integer.valueOf(limitInput.getText().toString());
                         } catch (NumberFormatException | NullPointerException e){
                             e.printStackTrace();
@@ -148,7 +156,7 @@ public class LimitsActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(String.format(
                 MessageManager.getString(R.string.fmt_record_exists),
-                Date.get().getMonth(old.getMonth()), old.getYear()
+                DateManager.get().getMonth(old.getMonth()), old.getYear()
         ));
 
         alertDialog.setMessage(String.format(

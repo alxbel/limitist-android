@@ -16,6 +16,18 @@ public class BiMap<K, V> {
         mInversedMap.put(v, k);
     }
 
+    public void putAll(K[] keys, V[] values) {
+        for (int i = 0; i < keys.length; i++) {
+            mTreeMap.put(keys[i], values[i]);
+            mInversedMap.put(values[i], keys[i]);
+        }
+    }
+
+    public void clear() {
+        mTreeMap.clear();
+        mInversedMap.clear();
+    }
+
     public Map<K, V> getTreeMap() {
         return mTreeMap;
     }
