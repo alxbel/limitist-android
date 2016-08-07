@@ -34,7 +34,7 @@ public class LimitStorage {
         mDatabase = new LimitDbHelper(mContext).getWritableDatabase();
     }
 
-    public void printAllLimits() {
+    public void dPrintAllLimits() {
         Log.d(TAG, "== Printing all limits ==");
         for (Limit limit : getLimits()) {
             Log.d(TAG, limit.toString());
@@ -46,13 +46,6 @@ public class LimitStorage {
         if (!isAllowed(limit.getLimitMonthly())) {
             return false;
         }
-//        Limit old = getLimit(limit.getId());
-//        if (old != null) {
-//            return old;
-//        } else {
-//            ContentValues values = getContentValues(limit);
-//            mDatabase.insert(LimitMonthlyTable.NAME, null, values);
-//        }
         ContentValues values = getContentValues(limit);
         mDatabase.insert(LimitMonthlyTable.NAME, null, values);
 
@@ -89,10 +82,71 @@ public class LimitStorage {
         return limits;
     }
 
+    public List<Limit> getLimits(int year) {
+        List<Limit> limits = new ArrayList<>();
+
+        LimitCursorWrapper cursor = queryLimits(
+                LimitMonthlyTable.Cols.YEAR + " = ?",
+                new String[]{String.valueOf(year)}
+        );
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                limits.add(cursor.getLimit());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return limits;
+    }
+
+    public List<Limit> getLimits(int year, int monthStart) {
+        List<Limit> limits = new ArrayList<>();
+
+        LimitCursorWrapper cursor = queryLimits(
+                LimitMonthlyTable.Cols.YEAR + " = ? AND " +
+                        LimitMonthlyTable.Cols.MONTH + " >= ?",
+                new String[]{String.valueOf(year), String.valueOf(monthStart)}
+        );
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                limits.add(cursor.getLimit());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return limits;
+    }
+
     public Limit getLimit(String id) {
         LimitCursorWrapper cursor = queryLimits(
                 LimitMonthlyTable.Cols.ID + " = ?",
                 new String[]{id}
+        );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getLimit();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public Limit getLimit(String year, String month) {
+        LimitCursorWrapper cursor = queryLimits(
+                LimitMonthlyTable.Cols.YEAR + " = ? AND " +
+                        LimitMonthlyTable.Cols.MONTH + " = ?",
+                new String[]{year, month}
         );
 
         try {

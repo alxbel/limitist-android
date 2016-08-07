@@ -1,7 +1,6 @@
 package com.github.blackenwhite.costplanner.controller;
 
 import android.content.DialogInterface;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +28,7 @@ public class LimitsActivity extends AppCompatActivity {
     private TextView mYearLabel;
     private ListView mMonthListView;
 
-    private ArrayAdapter<String> mMonthAdapter;
+    private LimitAdapter mMonthAdapter;
     private Integer mCurrentYear;
 
     @Override
@@ -54,7 +53,7 @@ public class LimitsActivity extends AppCompatActivity {
         setupListView();
     }
 
-    private AlertDialog getInputLimitDialog(final String month, final Limit limit) {
+    public AlertDialog getInputLimitDialog(final String month, final Limit limit) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(LimitsActivity.this);
         alertDialog.setTitle(month);
 
@@ -93,10 +92,11 @@ public class LimitsActivity extends AppCompatActivity {
                                     ResourceManager.showMessage(msgIncorrect);
                                 }
                             }
+                            mMonthAdapter.notifyDataSetChanged();
                         } catch (NumberFormatException | NullPointerException e) {
                             ResourceManager.showMessage(R.string.toast_incorrect_value);
                         }
-                        mLimitStorage.printAllLimits();
+                        mLimitStorage.dPrintAllLimits();
                     }
                 }
         );
@@ -114,16 +114,7 @@ public class LimitsActivity extends AppCompatActivity {
 
     private void setupListView() {
         mMonthListView = (ListView)findViewById(R.id.limits_list_months);
-        mMonthAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, DateManager.get().getRemainsMonthNames());
+        mMonthAdapter = new LimitAdapter(this, DateManager.get().getRemainsMonthNames());
         mMonthListView.setAdapter(mMonthAdapter);
-        mMonthListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Integer monthIndex = DateManager.get().getMonthIndex(mMonthAdapter.getItem(position));
-                String limID = Limit.createID(mCurrentYear, monthIndex);
-                Limit limit = mLimitStorage.getLimit(limID);
-                getInputLimitDialog(mMonthAdapter.getItem(position), limit).show();
-            }
-        });
     }
 }

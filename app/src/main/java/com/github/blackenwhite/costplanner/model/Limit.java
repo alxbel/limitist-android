@@ -17,7 +17,7 @@ public class Limit {
         mYear = year;
         mMonth = month;
         mLimitMonthly = limitMonthly;
-        setupDailyLimitArray();
+//        setupDailyLimitArray();
     }
 
     @Override
