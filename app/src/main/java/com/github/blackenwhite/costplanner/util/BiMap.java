@@ -1,5 +1,7 @@
 package com.github.blackenwhite.costplanner.util;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,12 @@ public class BiMap<K, V> {
     public K getKey(V v) throws IllegalArgumentException {
         K k = mInversedMap.get(v);
         if (k == null) {
-            throw new IllegalArgumentException();
+            if (v instanceof String) {
+                k = mInversedMap.get(((String) v).toLowerCase());
+                if (k == null) {
+                    throw new IllegalArgumentException();
+                }
+            }
         }
         return k;
     }

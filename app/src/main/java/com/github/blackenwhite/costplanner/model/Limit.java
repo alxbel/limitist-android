@@ -40,6 +40,10 @@ public class Limit {
         return mId != null ? mId.equals(limit.mId) : limit.mId == null;
     }
 
+    public static String createID(Integer year, Integer month) {
+        return String.format("%d%d", year, month);
+    }
+
     public String getId() {
         return mId;
     }

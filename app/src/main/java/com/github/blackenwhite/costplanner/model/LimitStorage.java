@@ -9,12 +9,14 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitCursorWrapper;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbHelper;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitMonthlyTable;
+import com.github.blackenwhite.costplanner.util.ResourceManager;
 
 public class LimitStorage {
-    public static final String TAG = LimitStorage.class.getSimpleName();
+    private static final String TAG = LimitStorage.class.getSimpleName();
     private static LimitStorage sLimitStorage;
 
     private Context mContext;
@@ -40,22 +42,33 @@ public class LimitStorage {
         Log.d(TAG, "== End of output ==");
     }
 
-    public Limit addLimit(Limit limit) {
-        Limit old = getLimit(limit.getId());
-        if (old != null) {
-            return old;
-        } else {
-            ContentValues values = getContentValues(limit);
-            mDatabase.insert(LimitMonthlyTable.NAME, null, values);
+    public boolean addLimit(Limit limit) {
+        if (!isAllowed(limit.getLimitMonthly())) {
+            return false;
         }
-        return null;
+//        Limit old = getLimit(limit.getId());
+//        if (old != null) {
+//            return old;
+//        } else {
+//            ContentValues values = getContentValues(limit);
+//            mDatabase.insert(LimitMonthlyTable.NAME, null, values);
+//        }
+        ContentValues values = getContentValues(limit);
+        mDatabase.insert(LimitMonthlyTable.NAME, null, values);
+
+        return true;
     }
 
-    public void updateLimit(Limit limit) {
+    public boolean updateLimit(Limit limit) {
+        if (!isAllowed(limit.getLimitMonthly())) {
+            return false;
+        }
         ContentValues values = getContentValues(limit);
         mDatabase.update(LimitMonthlyTable.NAME, values,
                 LimitMonthlyTable.Cols.ID + " = ?",
                 new String[]{limit.getId()});
+
+        return true;
     }
 
     public List<Limit> getLimits() {
@@ -114,5 +127,9 @@ public class LimitStorage {
         values.put(LimitMonthlyTable.Cols.MONTH, limit.getMonth());
         values.put(LimitMonthlyTable.Cols.LIMIT_MONTHLY, limit.getLimitMonthly());
         return values;
+    }
+
+    private boolean isAllowed(int val) {
+        return val >= ResourceManager.getInteger(R.integer.limit_minimum_allowed);
     }
 }

@@ -4,10 +4,14 @@ import android.widget.Toast;
 
 import com.github.blackenwhite.costplanner.controller.MainActivity;
 
-public class MessageManager {
+public class ResourceManager {
 
     public static String getString(int strId) {
         return MainActivity.getContext().getString(strId);
+    }
+
+    public static int getInteger(int integerId) {
+        return MainActivity.getContext().getResources().getInteger(integerId);
     }
 
     public static void showMessage(String msg) {

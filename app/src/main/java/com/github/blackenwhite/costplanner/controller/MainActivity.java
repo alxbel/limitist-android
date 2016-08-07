@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         TextView monthLabel = (TextView) findViewById(R.id.label_month);
         monthLabel.setText(DateManager.get().getCurrentMonth());
 
-//        startLimitsActivity();
+        startLimitsActivity();
     }
 
     @Override

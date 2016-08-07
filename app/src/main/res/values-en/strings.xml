@@ -19,11 +19,14 @@
     <string name="whole_year">Whole year</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="limit_label">Limit:</string>
+    <string name="label_limit">Limit:</string>
     <string formatted="false" name="fmt_record_exists">Record \"%s %d\" exists</string>
     <string name="toast_record_added">Record added</string>
     <string formatted="false" name="fmt_question_update_record">
         Update limit?\n\n%-10s%5s%d\n%-10s%5s%d
+    </string>
+    <string formatted="false" name="fmt_limit_minimum_allowed">
+        Minimum allowed limit: %d
     </string>
     <string name="toast_record_no_changes">To update record, enter new limit value</string>
     <string name="current_lim">Current:</string>

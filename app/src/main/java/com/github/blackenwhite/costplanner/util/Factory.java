@@ -17,7 +17,7 @@ public class Factory {
         return spinner;
     }
 
-    public static Integer[] getInts(int start, int end) {
+    public static Integer[] getIntegers(int start, int end) {
         Integer[] integers = new Integer[end - start + 1];
         for (int i = 0; i < integers.length; i++) {
             integers[i] = start++;

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="month_array">
-        <item>january</item>
-        <item>february</item>
-        <item>march</item>
-        <item>april</item>
-        <item>may</item>
-        <item>june</item>
-        <item>july</item>
-        <item>august</item>
-        <item>september</item>
-        <item>october</item>
-        <item>november</item>
-        <item>december</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 
     <string-array name="years_array">

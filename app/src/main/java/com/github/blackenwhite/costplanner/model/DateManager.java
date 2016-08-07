@@ -1,6 +1,7 @@
 package com.github.blackenwhite.costplanner.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.controller.MainActivity;
@@ -13,12 +14,15 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class DateManager {
     private static DateManager sDateManager;
 
     private static final String TAG = "DateManager";
+
     private static final String ERROR_MONTH_NAME = "#error_month_name#";
     private static final String RU_LOCALE = "ru";
     private static final int DEFAULT_MONTH_INDEX = 1;
@@ -48,8 +52,6 @@ public class DateManager {
         return sDateManager;
     }
 
-
-
     public String getDate() {
         return mDateFormatter.withLocale(mLocale).print(mLocalDate);
     }
@@ -66,9 +68,9 @@ public class DateManager {
         return mLocale;
     }
 
-    public void setLocale(Locale locale) {
-        mLocale = locale;
-    }
+//    public void setLocale(Locale locale) {
+//        mLocale = locale;
+//    }
 
     public void setLocale(String locale) {
         if (mLocale != null && mLocale.equals(locale)) {
@@ -78,11 +80,14 @@ public class DateManager {
         initMonths();
     }
 
-    public int getCurrentYear() {
+    public Integer getCurrentYear() {
+        if (mLocalDate == null) {
+            mLocalDate = new LocalDate();
+        }
         return mLocalDate.getYear();
     }
 
-    public int getCurrentMonthIndex() {
+    public Integer getCurrentMonthIndex() {
         return mLocalDate.getMonthOfYear();
     }
 
@@ -90,9 +95,9 @@ public class DateManager {
         return getMonth(mLocalDate.getMonthOfYear());
     }
 
-    public int getMonthIndex(String month) {
+    public Integer getMonthIndex(String month) {
         try {
-            return mMonthColl.getKey(month.toLowerCase());
+            return mMonthColl.getKey(month);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return DEFAULT_MONTH_INDEX;
@@ -101,9 +106,7 @@ public class DateManager {
 
     public String getMonth(int index) {
         try {
-            String month = mMonthColl.getValue(index);
-            char c = month.charAt(0);
-            return String.valueOf(Character.toUpperCase(c)) + month.substring(1);
+            return mMonthColl.getValue(index);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return ERROR_MONTH_NAME;
@@ -118,8 +121,15 @@ public class DateManager {
         return mMonthColl.getValues().toArray(new String[mMonthColl.size()]);
     }
 
+    public String[] getRemainsMonthNames() {
+        final List<String> all = mMonthColl.getValues();
+        final int cur = getCurrentMonthIndex() - 1;
+        String[] remains = Arrays.copyOfRange(all.toArray(new String[mMonthColl.size()]), cur, mMonthColl.size());
+        return remains;
+    }
+
     private void initMonths() {
         mMonthColl.clear();
-        mMonthColl.putAll(Factory.getInts(1,12), mContext.getResources().getStringArray(R.array.month_array));
+        mMonthColl.putAll(Factory.getIntegers(1,12), mContext.getResources().getStringArray(R.array.month_array));
     }
 }
