@@ -6,9 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -16,14 +13,14 @@ import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.DateManager;
-import com.github.blackenwhite.costplanner.model.Limit;
-import com.github.blackenwhite.costplanner.model.LimitStorage;
+import com.github.blackenwhite.costplanner.model.LimitMonthly;
+import com.github.blackenwhite.costplanner.model.LimitMonthlyStorage;
 import com.github.blackenwhite.costplanner.util.ResourceManager;
 
 public class LimitsActivity extends AppCompatActivity {
     private static final String TAG = "LimitsActivity";
 
-    private LimitStorage mLimitStorage;
+    private LimitMonthlyStorage mLimitMonthlyStorage;
 
     private TextView mYearLabel;
     private ListView mMonthListView;
@@ -36,7 +33,7 @@ public class LimitsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // init members
-        mLimitStorage = LimitStorage.get(getApplicationContext());
+        mLimitMonthlyStorage = LimitMonthlyStorage.get(getApplicationContext());
         mCurrentYear = DateManager.get().getCurrentYear();
 
         setContentView(R.layout.activity_limits);
@@ -53,15 +50,15 @@ public class LimitsActivity extends AppCompatActivity {
         setupListView();
     }
 
-    public AlertDialog getInputLimitDialog(final String month, final Limit limit) {
+    public AlertDialog getInputLimitDialog(final String month, final LimitMonthly limitMonthly) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(LimitsActivity.this);
         alertDialog.setTitle(month);
 
         LayoutInflater inflater = getLayoutInflater();
         LinearLayout dialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_limit_input, null);
         final EditText limitInput = (EditText) dialogLayout.findViewById(R.id.input_dialog_limit);
-        if (limit != null) {
-            limitInput.setHint(Integer.valueOf(limit.getLimitMonthly()).toString());
+        if (limitMonthly != null) {
+            limitInput.setHint(Integer.valueOf(limitMonthly.getLimitValue()).toString());
         }
 
         alertDialog.setView(dialogLayout);
@@ -75,18 +72,18 @@ public class LimitsActivity extends AppCompatActivity {
                                     ResourceManager.getString(R.string.fmt_limit_minimum_allowed),
                                     ResourceManager.getInteger(R.integer.limit_minimum_allowed));
                             Integer limMonthly = Integer.valueOf(limitInput.getText().toString());
-                            if (limit != null) {
-                                if (!Integer.valueOf(limit.getLimitMonthly()).equals(limMonthly)) {
-                                    limit.setLimitMonthly(limMonthly);
-                                    if (mLimitStorage.updateLimit(limit)) {
+                            if (limitMonthly != null) {
+                                if (!Integer.valueOf(limitMonthly.getLimitValue()).equals(limMonthly)) {
+                                    limitMonthly.setLimitValue(limMonthly);
+                                    if (mLimitMonthlyStorage.updateLimitMonthly(limitMonthly)) {
                                         ResourceManager.showMessage(R.string.toast_record_updated);
                                     } else {
                                         ResourceManager.showMessage(msgIncorrect);
                                     }
                                 }
                             } else {
-                                Limit newLim = new Limit(mCurrentYear, DateManager.get().getMonthIndex(month), limMonthly);
-                                if (mLimitStorage.addLimit(newLim)) {
+                                LimitMonthly newLim = new LimitMonthly(mCurrentYear, DateManager.get().getMonthIndex(month), limMonthly);
+                                if (mLimitMonthlyStorage.addLimitMonthly(newLim)) {
                                     ResourceManager.showMessage(R.string.toast_record_added);
                                 } else {
                                     ResourceManager.showMessage(msgIncorrect);
@@ -96,7 +93,7 @@ public class LimitsActivity extends AppCompatActivity {
                         } catch (NumberFormatException | NullPointerException e) {
                             ResourceManager.showMessage(R.string.toast_incorrect_value);
                         }
-                        mLimitStorage.dPrintAllLimits();
+                        mLimitMonthlyStorage.dPrintAllLimitsMonthly();
                     }
                 }
         );

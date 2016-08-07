@@ -10,8 +10,16 @@ import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitDailyTa
 public class LimitDbHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DATABASE_NAME = "limits.db";
+    private static LimitDbHelper instance;
 
-    public LimitDbHelper(Context context) {
+    public static LimitDbHelper get(Context context) {
+        if (instance == null) {
+            instance = new LimitDbHelper(context);
+        }
+        return instance;
+    }
+
+    private LimitDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }
 
@@ -21,16 +29,16 @@ public class LimitDbHelper extends SQLiteOpenHelper {
                 LimitMonthlyTable.Cols.ID + " text primary key, " +
                 LimitMonthlyTable.Cols.YEAR + " integer, " +
                 LimitMonthlyTable.Cols.MONTH + " integer, " +
-                LimitMonthlyTable.Cols.LIMIT_MONTHLY + " integer" +
-                " )"
+                LimitMonthlyTable.Cols.LIMIT_VALUE + " integer" +
+                ")"
         );
 
         db.execSQL("create table " + LimitDailyTable.NAME + "(" +
-                LimitDailyTable.Cols.ID + " integer primary key autoincrement, " +
-                LimitDailyTable.Cols.MONTH_ID + " text, " +
-                LimitDailyTable.Cols.DAY + ", " +
-                LimitDailyTable.Cols.LIMIT_DAILY + ", " +
-                "foreign key(" + LimitDailyTable.Cols.MONTH_ID + ") references " + LimitMonthlyTable.NAME + "(" + LimitMonthlyTable.Cols.ID + "))"
+                LimitDailyTable.Cols.ID + " text primary key, " +
+                LimitDailyTable.Cols.LIMIT_MONTHLY_ID + " text, " +
+                LimitDailyTable.Cols.DAY + " integer, " +
+                LimitDailyTable.Cols.LIMIT_VALUE + " integer, " +
+                "foreign key(" + LimitDailyTable.Cols.LIMIT_MONTHLY_ID + ") references " + LimitMonthlyTable.NAME + "(" + LimitMonthlyTable.Cols.ID + "))"
         );
     }
 

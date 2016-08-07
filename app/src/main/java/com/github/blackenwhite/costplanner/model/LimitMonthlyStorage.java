@@ -10,82 +10,82 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.blackenwhite.costplanner.R;
-import com.github.blackenwhite.costplanner.dao.sqlite.LimitCursorWrapper;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitMonthlyCursorWrapper;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbHelper;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitMonthlyTable;
 import com.github.blackenwhite.costplanner.util.ResourceManager;
 
-public class LimitStorage {
-    private static final String TAG = LimitStorage.class.getSimpleName();
-    private static LimitStorage sLimitStorage;
+public class LimitMonthlyStorage {
+    private static final String TAG = LimitMonthlyStorage.class.getSimpleName();
+    private static LimitMonthlyStorage instance;
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public static LimitStorage get(Context context) {
-        if (sLimitStorage == null) {
-            sLimitStorage = new LimitStorage(context);
+    public static LimitMonthlyStorage get(Context context) {
+        if (instance == null) {
+            instance = new LimitMonthlyStorage(context);
         }
-        return sLimitStorage;
+        return instance;
     }
 
-    private LimitStorage(Context context) {
+    private LimitMonthlyStorage(Context context) {
         mContext = context.getApplicationContext();
-        mDatabase = new LimitDbHelper(mContext).getWritableDatabase();
+        mDatabase = LimitDbHelper.get(mContext).getWritableDatabase();
     }
 
-    public void dPrintAllLimits() {
+    public void dPrintAllLimitsMonthly() {
         Log.d(TAG, "== Printing all limits ==");
-        for (Limit limit : getLimits()) {
-            Log.d(TAG, limit.toString());
+        for (LimitMonthly limitMonthly : getLimitsMonthly()) {
+            Log.d(TAG, limitMonthly.toString());
         }
         Log.d(TAG, "== End of output ==");
     }
 
-    public boolean addLimit(Limit limit) {
-        if (!isAllowed(limit.getLimitMonthly())) {
+    public boolean addLimitMonthly(LimitMonthly limitMonthly) {
+        if (!isAllowed(limitMonthly.getLimitValue())) {
             return false;
         }
-        ContentValues values = getContentValues(limit);
+        ContentValues values = getContentValues(limitMonthly);
         mDatabase.insert(LimitMonthlyTable.NAME, null, values);
 
         return true;
     }
 
-    public boolean updateLimit(Limit limit) {
-        if (!isAllowed(limit.getLimitMonthly())) {
+    public boolean updateLimitMonthly(LimitMonthly limitMonthly) {
+        if (!isAllowed(limitMonthly.getLimitValue())) {
             return false;
         }
-        ContentValues values = getContentValues(limit);
+        ContentValues values = getContentValues(limitMonthly);
         mDatabase.update(LimitMonthlyTable.NAME, values,
                 LimitMonthlyTable.Cols.ID + " = ?",
-                new String[]{limit.getId()});
+                new String[]{limitMonthly.getID()});
 
         return true;
     }
 
-    public List<Limit> getLimits() {
-        List<Limit> limits = new ArrayList<>();
+    public List<LimitMonthly> getLimitsMonthly() {
+        List<LimitMonthly> limitMonthlies = new ArrayList<>();
 
-        LimitCursorWrapper cursor = queryLimits(null, null);
+        LimitMonthlyCursorWrapper cursor = queryLimitsMonthly(null, null);
 
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                limits.add(cursor.getLimit());
+                limitMonthlies.add(cursor.getLimitMonthly());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return limits;
+        return limitMonthlies;
     }
 
-    public List<Limit> getLimits(int year) {
-        List<Limit> limits = new ArrayList<>();
+    public List<LimitMonthly> getLimitsMonthly(int year) {
+        List<LimitMonthly> limitsMonthly = new ArrayList<>();
 
-        LimitCursorWrapper cursor = queryLimits(
+        LimitMonthlyCursorWrapper cursor = queryLimitsMonthly(
                 LimitMonthlyTable.Cols.YEAR + " = ?",
                 new String[]{String.valueOf(year)}
         );
@@ -93,20 +93,20 @@ public class LimitStorage {
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                limits.add(cursor.getLimit());
+                limitsMonthly.add(cursor.getLimitMonthly());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return limits;
+        return limitsMonthly;
     }
 
-    public List<Limit> getLimits(int year, int monthStart) {
-        List<Limit> limits = new ArrayList<>();
+    public List<LimitMonthly> getLimitsMonthly(int year, int monthStart) {
+        List<LimitMonthly> limitsMonthly = new ArrayList<>();
 
-        LimitCursorWrapper cursor = queryLimits(
+        LimitMonthlyCursorWrapper cursor = queryLimitsMonthly(
                 LimitMonthlyTable.Cols.YEAR + " = ? AND " +
                         LimitMonthlyTable.Cols.MONTH + " >= ?",
                 new String[]{String.valueOf(year), String.valueOf(monthStart)}
@@ -115,18 +115,18 @@ public class LimitStorage {
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                limits.add(cursor.getLimit());
+                limitsMonthly.add(cursor.getLimitMonthly());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return limits;
+        return limitsMonthly;
     }
 
-    public Limit getLimit(String id) {
-        LimitCursorWrapper cursor = queryLimits(
+    public LimitMonthly getLimitMonthly(String id) {
+        LimitMonthlyCursorWrapper cursor = queryLimitsMonthly(
                 LimitMonthlyTable.Cols.ID + " = ?",
                 new String[]{id}
         );
@@ -136,14 +136,14 @@ public class LimitStorage {
                 return null;
             }
             cursor.moveToFirst();
-            return cursor.getLimit();
+            return cursor.getLimitMonthly();
         } finally {
             cursor.close();
         }
     }
 
-    public Limit getLimit(String year, String month) {
-        LimitCursorWrapper cursor = queryLimits(
+    public LimitMonthly getLimitMonthly(String year, String month) {
+        LimitMonthlyCursorWrapper cursor = queryLimitsMonthly(
                 LimitMonthlyTable.Cols.YEAR + " = ? AND " +
                         LimitMonthlyTable.Cols.MONTH + " = ?",
                 new String[]{year, month}
@@ -154,13 +154,13 @@ public class LimitStorage {
                 return null;
             }
             cursor.moveToFirst();
-            return cursor.getLimit();
+            return cursor.getLimitMonthly();
         } finally {
             cursor.close();
         }
     }
 
-    private LimitCursorWrapper queryLimits(String whereClause, String[] whereArgs) {
+    private LimitMonthlyCursorWrapper queryLimitsMonthly(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 LimitMonthlyTable.NAME,
                 null,
@@ -171,15 +171,15 @@ public class LimitStorage {
                 null
         );
 
-        return new LimitCursorWrapper(cursor);
+        return new LimitMonthlyCursorWrapper(cursor);
     }
 
-    private static ContentValues getContentValues(Limit limit) {
+    private static ContentValues getContentValues(LimitMonthly limitMonthly) {
         ContentValues values = new ContentValues();
-        values.put(LimitMonthlyTable.Cols.ID, limit.getId());
-        values.put(LimitMonthlyTable.Cols.YEAR, limit.getYear());
-        values.put(LimitMonthlyTable.Cols.MONTH, limit.getMonth());
-        values.put(LimitMonthlyTable.Cols.LIMIT_MONTHLY, limit.getLimitMonthly());
+        values.put(LimitMonthlyTable.Cols.ID, limitMonthly.getID());
+        values.put(LimitMonthlyTable.Cols.YEAR, limitMonthly.getYear());
+        values.put(LimitMonthlyTable.Cols.MONTH, limitMonthly.getMonth());
+        values.put(LimitMonthlyTable.Cols.LIMIT_VALUE, limitMonthly.getLimitValue());
         return values;
     }
 

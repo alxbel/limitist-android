@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.DateManager;
-import com.github.blackenwhite.costplanner.model.Limit;
-import com.github.blackenwhite.costplanner.model.LimitStorage;
+import com.github.blackenwhite.costplanner.model.LimitMonthly;
+import com.github.blackenwhite.costplanner.model.LimitMonthlyStorage;
 
 public class LimitAdapter extends ArrayAdapter<String> {
     private final LimitsActivity mContext;
@@ -33,11 +33,11 @@ public class LimitAdapter extends ArrayAdapter<String> {
         monthText.setText(mRemainMonths[position]);
 
         String monthIndex = DateManager.get().getMonthIndex(mRemainMonths[position]).toString();
-        final Limit limit = LimitStorage.get(mContext).getLimit(
+        final LimitMonthly limitMonthly = LimitMonthlyStorage.get(mContext).getLimitMonthly(
                 CURRENT_YEAR,
                 monthIndex);
-        if (limit != null) {
-            limitText.setText(String.valueOf(limit.getLimitMonthly()));
+        if (limitMonthly != null) {
+            limitText.setText(String.valueOf(limitMonthly.getLimitValue()));
         } else {
             limitText.setVisibility(View.GONE);
         }
@@ -45,7 +45,7 @@ public class LimitAdapter extends ArrayAdapter<String> {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.getInputLimitDialog(mRemainMonths[position], limit).show();
+                mContext.getInputLimitDialog(mRemainMonths[position], limitMonthly).show();
             }
         });
 
