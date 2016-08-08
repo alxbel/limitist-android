@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.DateManager;
+import com.github.blackenwhite.costplanner.model.LimitDailyStorage;
 import com.github.blackenwhite.costplanner.model.LimitMonthly;
 import com.github.blackenwhite.costplanner.model.LimitMonthlyStorage;
 import com.github.blackenwhite.costplanner.util.ResourceManager;
@@ -21,6 +22,7 @@ public class LimitsActivity extends AppCompatActivity {
     private static final String TAG = "LimitsActivity";
 
     private LimitMonthlyStorage mLimitMonthlyStorage;
+    private LimitDailyStorage mLimitDailyStorage;
 
     private TextView mYearLabel;
     private ListView mMonthListView;
@@ -34,6 +36,7 @@ public class LimitsActivity extends AppCompatActivity {
 
         // init members
         mLimitMonthlyStorage = LimitMonthlyStorage.get(getApplicationContext());
+        mLimitDailyStorage = LimitDailyStorage.get(getApplicationContext());
         mCurrentYear = DateManager.get().getCurrentYear();
 
         setContentView(R.layout.activity_limits);
@@ -71,20 +74,39 @@ public class LimitsActivity extends AppCompatActivity {
                             String msgIncorrect = String.format(
                                     ResourceManager.getString(R.string.fmt_limit_minimum_allowed),
                                     ResourceManager.getInteger(R.integer.limit_minimum_allowed));
+
                             Integer limMonthly = Integer.valueOf(limitInput.getText().toString());
                             if (limitMonthly != null) {
                                 if (!Integer.valueOf(limitMonthly.getLimitValue()).equals(limMonthly)) {
                                     limitMonthly.setLimitValue(limMonthly);
+
+                                    /***************** UPDATE MONTHLY LIMIT *******************/
                                     if (mLimitMonthlyStorage.updateLimitMonthly(limitMonthly)) {
+
                                         ResourceManager.showMessage(R.string.toast_record_updated);
+
+                                        /******************** UPDATE DAILY LIMITS ***********************/
+                                        mLimitDailyStorage.updateLimits(limitMonthly.createDailyLimits());
+
+                                        mLimitMonthlyStorage.dPrintAllLimitsMonthly();
+                                        mLimitDailyStorage.dPrintAllLimitsDaily(limitMonthly.getId());
                                     } else {
                                         ResourceManager.showMessage(msgIncorrect);
                                     }
                                 }
                             } else {
-                                LimitMonthly newLim = new LimitMonthly(mCurrentYear, DateManager.get().getMonthIndex(month), limMonthly);
-                                if (mLimitMonthlyStorage.addLimitMonthly(newLim)) {
+                                LimitMonthly newLimitMonthly = new LimitMonthly(mCurrentYear, DateManager.get().getMonthIndex(month), limMonthly);
+
+                                /****************** INSERT MONTHLY LIMIT ******************/
+                                if (mLimitMonthlyStorage.addLimitMonthly(newLimitMonthly)) {
+
                                     ResourceManager.showMessage(R.string.toast_record_added);
+
+                                    /****************** INSERT DAILY LIMITS *****************/
+                                    mLimitDailyStorage.addLimits(newLimitMonthly.createDailyLimits());
+
+                                    mLimitMonthlyStorage.dPrintAllLimitsMonthly();
+                                    mLimitDailyStorage.dPrintAllLimitsDaily(newLimitMonthly.getId());
                                 } else {
                                     ResourceManager.showMessage(msgIncorrect);
                                 }
@@ -93,7 +115,7 @@ public class LimitsActivity extends AppCompatActivity {
                         } catch (NumberFormatException | NullPointerException e) {
                             ResourceManager.showMessage(R.string.toast_incorrect_value);
                         }
-                        mLimitMonthlyStorage.dPrintAllLimitsMonthly();
+
                     }
                 }
         );

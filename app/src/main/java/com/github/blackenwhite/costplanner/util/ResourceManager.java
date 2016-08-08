@@ -1,24 +1,29 @@
 package com.github.blackenwhite.costplanner.util;
 
+import android.content.Context;
 import android.widget.Toast;
-
-import com.github.blackenwhite.costplanner.controller.MainActivity;
 
 public class ResourceManager {
 
+    private static Context sContext;
+
+    public static void init(Context context) {
+        sContext = context;
+    }
+
     public static String getString(int strId) {
-        return MainActivity.getContext().getString(strId);
+        return sContext.getString(strId);
     }
 
     public static int getInteger(int integerId) {
-        return MainActivity.getContext().getResources().getInteger(integerId);
+        return sContext.getResources().getInteger(integerId);
     }
 
     public static void showMessage(String msg) {
-        Toast.makeText(MainActivity.getContext(), msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(sContext, msg, Toast.LENGTH_LONG).show();
     }
 
     public static void showMessage(int msgId) {
-        Toast.makeText(MainActivity.getContext(), MainActivity.getContext().getString(msgId), Toast.LENGTH_LONG).show();
+        Toast.makeText(sContext, sContext.getString(msgId), Toast.LENGTH_LONG).show();
     }
 }

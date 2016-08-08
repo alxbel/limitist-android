@@ -20,22 +20,33 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.5">
 
-                <!-- Current date -->
+
                 <TextView
-                    android:id="@+id/label_main_date"
-                    android:layout_width="match_parent"
+                    android:id="@+id/label_month"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:gravity="center_horizontal"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"/>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/main_text_month_limit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_label_month_no_limit"
+                    android:textSize="17sp"
+                    android:textStyle="italic"
+                    android:typeface="sans"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -46,22 +57,33 @@
                 android:layerType="software"
                 android:src="@drawable/dotted"/>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.5">
 
+
                 <TextView
-                    android:id="@+id/label_month"
-                    android:layout_width="match_parent"
+                    android:id="@+id/label_main_date"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:gravity="center_horizontal"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"/>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/main_text_day_limit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_label_month_no_limit"
+                    android:textSize="17sp"
+                    android:textStyle="italic"
+                    android:typeface="sans"
+                    android:layout_centerInParent="true"/>
 
+            </RelativeLayout>
 
         </LinearLayout>
 
@@ -69,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
+            android:layout_margin="10dp"
             android:src="@drawable/button_add"
             app:layout_anchor="@id/expenses_layout"
             app:layout_anchorGravity="bottom|right|end"/>

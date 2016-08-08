@@ -3,37 +3,42 @@ package com.github.blackenwhite.costplanner.model;
 import com.github.blackenwhite.costplanner.dao.file.Settings;
 
 public class LimitDaily {
-    private String mID;
-    private String mLimitMonthlyID;
+    private String mId;
+    private String mLimitMonthlyId;
     private int mDay;
     private int mLimitValue;
 
-    public LimitDaily(){}
-
-    public LimitDaily(String limitMonthlyID, int limitValue, int day) {
-        mLimitMonthlyID = limitMonthlyID;
+    public LimitDaily(String limitMonthlyId, int limitValue, int day) {
+        mLimitMonthlyId = limitMonthlyId;
         mLimitValue = limitValue;
         mDay = day;
-        mID = String.format("%d%d", mLimitMonthlyID, mDay);
+        mId = String.format("%s%d", mLimitMonthlyId, mDay);
+    }
+
+    public LimitDaily(String Id, String limitMonthlyId, int day, int limitValue) {
+        mId = Id;
+        mLimitMonthlyId = limitMonthlyId;
+        mDay = day;
+        mLimitValue = limitValue;
     }
 
     @Override
     public String toString() {
         return String.format(Settings.getLocale(),
-                "[id=%s] d:%d",
-                mID, mLimitValue);
+                "[id=%s] day:%d lim:%d",
+                mId, mDay, mLimitValue);
     }
 
     public int getDay() {
         return mDay;
     }
 
-    public String getID() {
-        return mID;
+    public String getId() {
+        return mId;
     }
 
-    public String getLimitMonthlyID() {
-        return mLimitMonthlyID;
+    public String getLimitMonthlyId() {
+        return mLimitMonthlyId;
     }
 
     public int getLimitValue() {
@@ -48,11 +53,19 @@ public class LimitDaily {
         mDay = day;
     }
 
-    public void setID(String ID) {
-        mID = ID;
+    public void setId(String id) {
+        mId = id;
     }
 
-    public void setLimitMonthlyID(String limitMonthlyID) {
-        mLimitMonthlyID = limitMonthlyID;
+    public void setLimitMonthlyId(String limitMonthlyId) {
+        mLimitMonthlyId = limitMonthlyId;
+    }
+
+    public static String generateIdForCurrentDate() {
+        String id = String.format("%s%s%s",
+                DateManager.get().getCurrentYear(),
+                DateManager.get().getCurrentMonthIndex(),
+                DateManager.get().getCurrentDayOfMonth());
+        return id;
     }
 }

@@ -59,27 +59,27 @@ public class LimitMonthlyStorage {
         ContentValues values = getContentValues(limitMonthly);
         mDatabase.update(LimitMonthlyTable.NAME, values,
                 LimitMonthlyTable.Cols.ID + " = ?",
-                new String[]{limitMonthly.getID()});
+                new String[]{limitMonthly.getId()});
 
         return true;
     }
 
     public List<LimitMonthly> getLimitsMonthly() {
-        List<LimitMonthly> limitMonthlies = new ArrayList<>();
+        List<LimitMonthly> limitsMonthly = new ArrayList<>();
 
         LimitMonthlyCursorWrapper cursor = queryLimitsMonthly(null, null);
 
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                limitMonthlies.add(cursor.getLimitMonthly());
+                limitsMonthly.add(cursor.getLimitMonthly());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return limitMonthlies;
+        return limitsMonthly;
     }
 
     public List<LimitMonthly> getLimitsMonthly(int year) {
@@ -174,9 +174,9 @@ public class LimitMonthlyStorage {
         return new LimitMonthlyCursorWrapper(cursor);
     }
 
-    private static ContentValues getContentValues(LimitMonthly limitMonthly) {
+    private ContentValues getContentValues(LimitMonthly limitMonthly) {
         ContentValues values = new ContentValues();
-        values.put(LimitMonthlyTable.Cols.ID, limitMonthly.getID());
+        values.put(LimitMonthlyTable.Cols.ID, limitMonthly.getId());
         values.put(LimitMonthlyTable.Cols.YEAR, limitMonthly.getYear());
         values.put(LimitMonthlyTable.Cols.MONTH, limitMonthly.getMonth());
         values.put(LimitMonthlyTable.Cols.LIMIT_VALUE, limitMonthly.getLimitValue());

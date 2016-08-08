@@ -37,8 +37,16 @@ public class DateManager {
     private Context mContext;
 
 
-    private DateManager() {
-        mContext = MainActivity.getContext();
+//    private DateManager() {
+//        mContext = MainActivity.getContext();
+//        mLocalDate = new LocalDate();
+//        mMonthColl = new BiMap<>();
+//        mDateFormatter = DateTimeFormat.forPattern(DATE_FORMAT);
+//        setLocale(Settings.getLangPref(mContext));
+//    }
+
+    private DateManager(Context context) {
+        mContext = context;
         mLocalDate = new LocalDate();
         mMonthColl = new BiMap<>();
         mDateFormatter = DateTimeFormat.forPattern(DATE_FORMAT);
@@ -46,10 +54,16 @@ public class DateManager {
     }
 
     public static DateManager get() {
-        if (sDateManager == null) {
-            sDateManager = new DateManager();
-        }
+//        if (sDateManager == null) {
+//            sDateManager = new DateManager();
+//        }
         return sDateManager;
+    }
+
+    public static void init(Context context) {
+        if (sDateManager == null) {
+            sDateManager = new DateManager(context);
+        }
     }
 
     public String getDate() {
@@ -88,7 +102,17 @@ public class DateManager {
     }
 
     public Integer getCurrentMonthIndex() {
+        if (mLocalDate == null) {
+            mLocalDate = new LocalDate();
+        }
         return mLocalDate.getMonthOfYear();
+    }
+
+    public Integer getCurrentDayOfMonth() {
+        if (mLocalDate == null) {
+            mLocalDate = new LocalDate();
+        }
+        return mLocalDate.getDayOfMonth();
     }
 
     public String getCurrentMonth() {

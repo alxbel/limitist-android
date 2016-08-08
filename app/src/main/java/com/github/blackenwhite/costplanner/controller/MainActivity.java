@@ -1,6 +1,5 @@
 package com.github.blackenwhite.costplanner.controller;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -15,6 +14,11 @@ import android.widget.TextView;
 import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.model.DateManager;
 import com.github.blackenwhite.costplanner.dao.file.Settings;
+import com.github.blackenwhite.costplanner.model.LimitDaily;
+import com.github.blackenwhite.costplanner.model.LimitDailyStorage;
+import com.github.blackenwhite.costplanner.model.LimitMonthly;
+import com.github.blackenwhite.costplanner.model.LimitMonthlyStorage;
+import com.github.blackenwhite.costplanner.util.ResourceManager;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -27,32 +31,44 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ABOUT = 12;
 
     private static String sLang;
-    private static Context sContext;
 
+    private TextView mDateLabel;
+    private TextView mLimitDailyText;
+    private TextView mMonthLabel;
+    private TextView mLimitMonthlyText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         JodaTimeAndroid.init(this);
-        sContext = this;
+        DateManager.init(this);
+        ResourceManager.init(this);
+        Settings.init(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.expenses_toolbar);
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        TextView dateLabel = (TextView) findViewById(R.id.label_main_date);
-        dateLabel.setText(DateManager.get().getDate());
-        TextView monthLabel = (TextView) findViewById(R.id.label_month);
-        monthLabel.setText(DateManager.get().getCurrentMonth());
+        mDateLabel = (TextView) findViewById(R.id.label_main_date);
+        mDateLabel.setText(DateManager.get().getDate());
+        mLimitDailyText = (TextView) findViewById(R.id.main_text_day_limit);
 
-        startLimitsActivity();
+        mMonthLabel = (TextView) findViewById(R.id.label_month);
+        mMonthLabel.setText(DateManager.get().getCurrentMonth());
+        mLimitMonthlyText = (TextView) findViewById(R.id.main_text_month_limit);
+
+        //startLimitsActivity();
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
+        updateView();
         updateLocale();
     }
 
@@ -99,10 +115,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static Context getContext() {
-        return sContext;
-    }
-
     private void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Resources res = getResources();
@@ -132,5 +144,16 @@ public class MainActivity extends AppCompatActivity {
     private void startLimitsActivity() {
         Intent intent = new Intent(this, LimitsActivity.class);
         startActivityForResult(intent, REQUEST_CODE_LIMITS);
+    }
+
+    private void updateView() {
+        LimitDaily limitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
+        if (limitDaily != null) {
+            mLimitDailyText.setText(String.valueOf(limitDaily.getLimitValue()));
+        }
+        LimitMonthly limitMonthly = LimitMonthlyStorage.get(this).getLimitMonthly(LimitMonthly.generateIdForCurrentDate());
+        if (limitMonthly != null) {
+            mLimitMonthlyText.setText(String.valueOf(limitMonthly.getLimitValue()));
+        }
     }
 }

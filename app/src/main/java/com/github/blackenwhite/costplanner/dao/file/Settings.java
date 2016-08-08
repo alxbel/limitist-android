@@ -4,11 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.github.blackenwhite.costplanner.R;
-import com.github.blackenwhite.costplanner.controller.MainActivity;
 
 import java.util.Locale;
 
 public class Settings {
+
+    private static Context sContext;
+
+    public static void init(Context context) {
+        sContext = context;
+    }
+
     public static String getLangPref(Context ctx) {
         SharedPreferences sharedPref = ctx.getSharedPreferences(
                 ctx.getString(R.string.settings_file_key), Context.MODE_PRIVATE);
@@ -26,6 +32,6 @@ public class Settings {
     }
 
     public static Locale getLocale() {
-        return MainActivity.getContext().getResources().getConfiguration().locale;
+        return sContext.getResources().getConfiguration().locale;
     }
 }
