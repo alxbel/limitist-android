@@ -154,13 +154,13 @@ public class MainActivity extends AppCompatActivity {
     private void updateView() {
         LimitDaily limitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
         if (limitDaily != null) {
-            mLimitDailyText.setText(String.format("L %5d", limitDaily.getLimitValue()));
-            mLimitDailySpent.setText(String.format("- %4d", limitDaily.getSpent()));
-            mLimitDailyBalance.setText(String.format("= %4d", limitDaily.getBalance()));
+            mLimitDailyText.setText(String.format("%-4s",limitDaily.getLimitValue()));
+            mLimitDailySpent.setText(String.format("%-4s", limitDaily.getSpent()));
+            mLimitDailyBalance.setText(String.format("%-4s",limitDaily.getBalance()));
         }
         LimitMonthly limitMonthly = LimitMonthlyStorage.get(this).getLimitMonthly(LimitMonthly.generateIdForCurrentDate());
         if (limitMonthly != null) {
-            mLimitMonthlyText.setText(String.valueOf(limitMonthly.getLimitValue()));
+            mLimitMonthlyText.setText(String.format("L %-4s",limitMonthly.getLimitValue()));
         }
     }
 }

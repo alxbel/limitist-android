@@ -7,7 +7,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <!--<item name="colorPrimary">@color/colorViolet</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorOrange</item>-->
+        <!--<item name="colorAccent">@color/colorOrange</item>-->
+
         <item name="android:textColorHint">@color/colorHint</item>
+
+        <item name="android:windowBackground">@color/colorBlue</item>
+        <!--<item name="android:windowBackground">@drawable/background</item>-->
     </style>
 
 </resources>

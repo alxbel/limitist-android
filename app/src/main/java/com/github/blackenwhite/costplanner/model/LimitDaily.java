@@ -64,11 +64,11 @@ public class LimitDaily {
     }
 
     public int getBalance() {
-        return mLimitValue - mSpent;
+        return getLimitValue() - getSpent();
     }
 
     public int getSpent() {
-        return mSpent;
+        return 250;
     }
 
     public void setSpent(int spent) {

@@ -28,34 +28,36 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
                     android:layout_margin="10dp"
+                    android:text="@string/text_main_label_month"
+                    android:textColor="@color/colorHint2"
                     android:textSize="25sp"
                     android:textStyle="bold"
-                    android:typeface="monospace"
-                    android:textColor="#f4efef"
-                    android:text="@string/text_main_label_month"/>
+                    android:typeface="monospace"/>
 
                 <TextView
                     android:id="@+id/text_main_month_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"/>
+                    android:textStyle="normal"
+                    android:textColor="@color/colorHint"/>
 
                 <TextView
                     android:id="@+id/text_main_month_limit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:text="@string/text_main_month_no_limit"
                     android:textSize="17sp"
                     android:textStyle="italic"
-                    android:typeface="sans"
-                    android:layout_centerInParent="true"/>
+                    android:textColor="@color/colorHint"
+                    android:typeface="sans"/>
 
             </RelativeLayout>
 
@@ -76,66 +78,106 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
                     android:layout_margin="10dp"
+                    android:text="@string/text_main_label_day"
+                    android:textColor="@color/colorHint"
                     android:textSize="25sp"
                     android:textStyle="bold"
-                    android:typeface="monospace"
-                    android:textColor="#f4efef"
-                    android:text="@string/text_main_label_day"/>
+                    android:typeface="monospace"/>
 
                 <TextView
                     android:id="@+id/text_main_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"/>
-
-                <!--<TextView-->
-                    <!--android:id="@+id/text_main_day_limit"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/text_main_month_no_limit"-->
-                    <!--android:textSize="17sp"-->
-                    <!--android:textStyle="italic"-->
-                    <!--android:typeface="sans"-->
-                    <!--android:layout_centerInParent="true"/>-->
+                    android:textStyle="normal"
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerInParent="true">
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/text_main_day_limit"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_main_day_no_limit"
-                        android:textSize="17sp"
-                        android:textStyle="italic"
-                        android:typeface="sans"
-                        android:layout_centerInParent="true"/>
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/text_main_day_spent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:textStyle="italic"
-                        android:typeface="sans"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:text="L"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="17sp"/>
 
-                    <TextView
-                        android:id="@+id/text_main_day_balance"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/text_main_day_limit"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:text="@string/text_main_day_no_limit"
+                            android:textSize="17sp"
+                            android:textStyle="italic"
+                            android:typeface="sans"
+                            android:textColor="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:textStyle="italic"
-                        android:typeface="sans"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:textSize="17sp"
+                            android:text="-"
+                            android:textColor="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/text_main_day_spent"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:textSize="17sp"
+                            android:textStyle="italic"
+                            android:typeface="sans"
+                            android:textColor="@color/colorAccent"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:textSize="17sp"
+                            android:text="="
+                            android:textColor="@color/colorGreen"/>
+
+                        <TextView
+                            android:id="@+id/text_main_day_balance"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:typeface="sans"
+                            android:textColor="@color/colorGreen"/>
+                    </LinearLayout>
 
                 </LinearLayout>
 
