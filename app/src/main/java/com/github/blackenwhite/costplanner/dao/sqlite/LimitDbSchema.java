@@ -20,6 +20,7 @@ public class LimitDbSchema {
             public static final String LIMIT_MONTHLY_ID = "limit_monthly_id";
             public static final String DAY = "day";
             public static final String LIMIT_VALUE = "limit_value";
+            public static final String SPENT = "spent";
         }
     }
 }

@@ -32,9 +32,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static String sLang;
 
-    private TextView mDateLabel;
+    private TextView mDateText;
     private TextView mLimitDailyText;
-    private TextView mMonthLabel;
+    private TextView mLimitDailySpent;
+    private TextView mLimitDailyBalance;
+
+    private TextView mMonthYearText;
     private TextView mLimitMonthlyText;
 
     @Override
@@ -52,15 +55,17 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        mDateLabel = (TextView) findViewById(R.id.label_main_date);
-        mDateLabel.setText(DateManager.get().getDate());
-        mLimitDailyText = (TextView) findViewById(R.id.main_text_day_limit);
+        mMonthYearText = (TextView) findViewById(R.id.text_main_month_year);
+        String monthYearString = String.format("%s %s", DateManager.get().getCurrentMonth(), DateManager.get().getCurrentYear());
+        mMonthYearText.setText(monthYearString);
+        mLimitMonthlyText = (TextView) findViewById(R.id.text_main_month_limit);
 
-        mMonthLabel = (TextView) findViewById(R.id.label_month);
-        mMonthLabel.setText(DateManager.get().getCurrentMonth());
-        mLimitMonthlyText = (TextView) findViewById(R.id.main_text_month_limit);
+        mDateText = (TextView) findViewById(R.id.text_main_date);
+        mDateText.setText(DateManager.get().getDate());
 
-        //startLimitsActivity();
+        mLimitDailyText = (TextView) findViewById(R.id.text_main_day_limit);
+        mLimitDailySpent = (TextView) findViewById(R.id.text_main_day_spent);
+        mLimitDailyBalance = (TextView) findViewById(R.id.text_main_day_balance);
     }
 
 
@@ -149,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
     private void updateView() {
         LimitDaily limitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
         if (limitDaily != null) {
-            mLimitDailyText.setText(String.valueOf(limitDaily.getLimitValue()));
+            mLimitDailyText.setText(String.format("L %5d", limitDaily.getLimitValue()));
+            mLimitDailySpent.setText(String.format("- %4d", limitDaily.getSpent()));
+            mLimitDailyBalance.setText(String.format("= %4d", limitDaily.getBalance()));
         }
         LimitMonthly limitMonthly = LimitMonthlyStorage.get(this).getLimitMonthly(LimitMonthly.generateIdForCurrentDate());
         if (limitMonthly != null) {

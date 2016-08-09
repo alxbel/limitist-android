@@ -38,6 +38,7 @@ public class LimitDbHelper extends SQLiteOpenHelper {
                 LimitDailyTable.Cols.LIMIT_MONTHLY_ID + " text, " +
                 LimitDailyTable.Cols.DAY + " integer, " +
                 LimitDailyTable.Cols.LIMIT_VALUE + " integer, " +
+                LimitDailyTable.Cols.SPENT + " integer, " +
                 "foreign key(" + LimitDailyTable.Cols.LIMIT_MONTHLY_ID + ") references " + LimitMonthlyTable.NAME + "(" + LimitMonthlyTable.Cols.ID + "))"
         );
     }

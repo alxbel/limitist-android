@@ -34,6 +34,8 @@
     <string name="toast_incorrect_value">Incorrect value</string>
     <string name="toast_record_updated">Record updated</string>
     <string name="toast_cancelled">Cancelled</string>
-    <string name="main_label_day_no_limit">Limit is not set</string>
-    <string name="main_label_month_no_limit">Limit is not set</string>
+    <string name="text_main_day_no_limit">Limit is not set</string>
+    <string name="text_main_month_no_limit">Limit is not set</string>
+    <string name="text_main_label_month">Month</string>
+    <string name="text_main_label_day">Day</string>
 </resources>

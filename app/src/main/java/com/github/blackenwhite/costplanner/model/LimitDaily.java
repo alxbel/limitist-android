@@ -7,6 +7,8 @@ public class LimitDaily {
     private String mLimitMonthlyId;
     private int mDay;
     private int mLimitValue;
+    private int mSpent;
+    private int mBalance;
 
     public LimitDaily(String limitMonthlyId, int limitValue, int day) {
         mLimitMonthlyId = limitMonthlyId;
@@ -59,6 +61,18 @@ public class LimitDaily {
 
     public void setLimitMonthlyId(String limitMonthlyId) {
         mLimitMonthlyId = limitMonthlyId;
+    }
+
+    public int getBalance() {
+        return mLimitValue - mSpent;
+    }
+
+    public int getSpent() {
+        return mSpent;
+    }
+
+    public void setSpent(int spent) {
+        mSpent = spent;
     }
 
     public static String generateIdForCurrentDate() {
