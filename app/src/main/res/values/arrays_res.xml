@@ -15,6 +15,13 @@
         <item>Декабрь</item>
     </string-array>
 
+    <string-array name="array_categories">
+        <item>Продукты</item>
+        <item>Услуги</item>
+        <item>Комм. платежи</item>
+        <item>Другое</item>
+    </string-array>
+
     <string-array name="years_array">
         <item>2016</item>
         <item>2017</item>

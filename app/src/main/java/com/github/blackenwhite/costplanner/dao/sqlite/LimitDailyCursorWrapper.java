@@ -16,8 +16,10 @@ public class LimitDailyCursorWrapper extends CursorWrapper {
         String limitMonthlyId = getString(getColumnIndex(LimitDailyTable.Cols.LIMIT_MONTHLY_ID));
         int day = getInt(getColumnIndex(LimitDailyTable.Cols.DAY));
         int value = getInt(getColumnIndex(LimitDailyTable.Cols.LIMIT_VALUE));
+        int spent = getInt(getColumnIndex(LimitDailyTable.Cols.SPENT));
 
         LimitDaily limitDaily = new LimitDaily(id, limitMonthlyId, day, value);
+        limitDaily.setSpent(spent);
         return limitDaily;
     }
 }

@@ -1,4 +1,4 @@
-package com.github.blackenwhite.costplanner.util;
+package com.github.blackenwhite.costplanner.model;
 
 import java.util.ArrayList;
 import java.util.List;

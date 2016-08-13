@@ -1,6 +1,11 @@
 package com.github.blackenwhite.costplanner.util;
 
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -25,5 +30,32 @@ public class Factory {
         return integers;
     }
 
+    public static ActionMode.Callback createTextSelectionDisablerCallback() {
+        return new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
 
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        };
+    }
+
+    public static SpannableString createUnderlinedString(Object source) {
+        SpannableString spannableString = new SpannableString(String.format("%s", String.valueOf(source)));
+        spannableString.setSpan(new UnderlineSpan(), 0, String.valueOf(source).length(), 0);
+        return spannableString;
+    }
 }

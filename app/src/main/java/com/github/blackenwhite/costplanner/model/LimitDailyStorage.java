@@ -62,15 +62,26 @@ public class LimitDailyStorage {
     public void updateLimits(List<LimitDaily> limits) {
         mDatabase.beginTransaction();
         for (LimitDaily limit : limits) {
-            ContentValues values = getContentValuesLimitValue(limit);
+            ContentValues contentValue = getContentValuesLimitValue(limit);
             mDatabase.update(
                     LimitDbSchema.LimitDailyTable.NAME,
-                    values,
+                    contentValue,
                     LimitDbSchema.LimitDailyTable.Cols.ID + " = ?",
                     new String[]{limit.getId()});
         }
         mDatabase.setTransactionSuccessful();
         mDatabase.endTransaction();
+    }
+
+    public void updateLimit(LimitDaily limitDaily) {
+        Log.d(TAG, limitDaily.toString());
+        ContentValues contentValue = getContentValuesLimitSpent(limitDaily);
+        mDatabase.update(
+                LimitDbSchema.LimitDailyTable.NAME,
+                contentValue,
+                LimitDbSchema.LimitDailyTable.Cols.ID + " = ?",
+                new String[]{limitDaily.getId()}
+        );
     }
 
     public List<LimitDaily> getLimitsDaily() {
@@ -153,6 +164,12 @@ public class LimitDailyStorage {
     private ContentValues getContentValuesLimitValue(LimitDaily limitDaily) {
         ContentValues values = new ContentValues();
         values.put(LimitDbSchema.LimitDailyTable.Cols.LIMIT_VALUE, limitDaily.getLimitValue());
+        return values;
+    }
+
+    private ContentValues getContentValuesLimitSpent(LimitDaily limitDaily) {
+        ContentValues values = new ContentValues();
+        values.put(LimitDbSchema.LimitDailyTable.Cols.SPENT, limitDaily.getSpent());
         return values;
     }
 }

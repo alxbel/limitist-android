@@ -1,12 +1,9 @@
 package com.github.blackenwhite.costplanner.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.github.blackenwhite.costplanner.R;
-import com.github.blackenwhite.costplanner.controller.MainActivity;
 import com.github.blackenwhite.costplanner.dao.file.Settings;
-import com.github.blackenwhite.costplanner.util.BiMap;
 import com.github.blackenwhite.costplanner.util.Factory;
 
 import org.joda.time.DateTime;

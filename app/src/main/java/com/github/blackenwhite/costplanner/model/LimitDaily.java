@@ -1,14 +1,11 @@
 package com.github.blackenwhite.costplanner.model;
 
-import com.github.blackenwhite.costplanner.dao.file.Settings;
-
 public class LimitDaily {
     private String mId;
     private String mLimitMonthlyId;
     private int mDay;
     private int mLimitValue;
     private int mSpent;
-    private int mBalance;
 
     public LimitDaily(String limitMonthlyId, int limitValue, int day) {
         mLimitMonthlyId = limitMonthlyId;
@@ -24,11 +21,23 @@ public class LimitDaily {
         mLimitValue = limitValue;
     }
 
+//    @Override
+//    public String toString() {
+//        return String.format(Settings.getLocale(),
+//                "[id=%s] day:%d lim:%d",
+//                mId, mDay, mLimitValue);
+//    }
+
+
     @Override
     public String toString() {
-        return String.format(Settings.getLocale(),
-                "[id=%s] day:%d lim:%d",
-                mId, mDay, mLimitValue);
+        return "LimitDaily{" +
+                "mId='" + mId + '\'' +
+                ", mLimitMonthlyId='" + mLimitMonthlyId + '\'' +
+                ", mLimitValue=" + mLimitValue +
+                ", mDay=" + mDay +
+                ", mSpent=" + mSpent +
+                '}';
     }
 
     public int getDay() {
@@ -68,7 +77,7 @@ public class LimitDaily {
     }
 
     public int getSpent() {
-        return 250;
+        return mSpent;
     }
 
     public void setSpent(int spent) {

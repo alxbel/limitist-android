@@ -15,11 +15,12 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/expenses_layout"
+            android:id="@+id/layout_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!--Monthly limit-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -32,7 +33,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_margin="10dp"
                     android:text="@string/text_main_label_month"
-                    android:textColor="@color/colorHint2"
+                    android:textColor="@color/colorGreyLighter"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     android:typeface="monospace"/>
@@ -44,23 +45,62 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/colorGrey"
                     android:textSize="20sp"
-                    android:textStyle="normal"
-                    android:textColor="@color/colorHint"/>
+                    android:textStyle="normal"/>
 
+                <!--[START] Monthly limit calculations-->
+                <TableLayout
+                    android:id="@+id/main_limit_monthly_calculations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal">-->
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="L "
+                            android:textColor="@color/colorGrey"
+                            android:textSize="@dimen/monthly_limit_calculation_text_size"/>
+
+                        <TextView
+                            android:id="@+id/text_main_month_limit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorGrey"
+                            android:textSize="@dimen/monthly_limit_calculation_text_size"
+                            android:textStyle="italic"
+                            android:typeface="sans"/>
+
+                    </TableRow>
+                    <!--</LinearLayout>-->
+
+
+                </TableLayout>
+
+                <!--Label shown in case there is no limit found for the month-->
                 <TextView
-                    android:id="@+id/text_main_month_limit"
+                    android:id="@+id/main_label_month_no_limit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/text_main_month_no_limit"
+                    android:text="@string/label_main_month_no_limit"
+                    android:textColor="@color/colorGrey"
                     android:textSize="17sp"
                     android:textStyle="italic"
-                    android:textColor="@color/colorHint"
                     android:typeface="sans"/>
+                <!--[END] Monthly limit calculations-->
 
             </RelativeLayout>
 
+            <!-- SEPARATOR ********************************************************************* -->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,7 +109,9 @@
                 android:contentDescription="underline"
                 android:layerType="software"
                 android:src="@drawable/dotted"/>
+            <!-- SEPARATOR ********************************************************************* -->
 
+            <!--Daily limit-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -82,7 +124,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_margin="10dp"
                     android:text="@string/text_main_label_day"
-                    android:textColor="@color/colorHint"
+                    android:textColor="@color/colorGrey"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     android:typeface="monospace"/>
@@ -94,104 +136,111 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="20sp"
-                    android:textStyle="normal"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textStyle="normal"/>
 
-                <LinearLayout
+                <!--[START] Daily limit calculations-->
+                <TableLayout
+                    android:id="@+id/main_limit_daily_calculations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical">
+                    android:layout_centerInParent="true">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    <TableRow>
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3"
-                            android:text="L"
+                            android:text="L "
                             android:textColor="@color/colorPrimary"
-                            android:textSize="17sp"/>
+                            android:textSize="@dimen/daily_limit_calculation_text_size"/>
 
                         <TextView
                             android:id="@+id/text_main_day_limit"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:text="@string/text_main_day_no_limit"
-                            android:textSize="17sp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/daily_limit_calculation_text_size"
                             android:textStyle="italic"
-                            android:typeface="sans"
-                            android:textColor="@color/colorPrimary"/>
+                            android:typeface="sans"/>
 
-                    </LinearLayout>
+                    </TableRow>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    <TableRow
+                        android:id="@+id/layout_main_limit_daily_minus">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3"
-                            android:textSize="17sp"
-                            android:text="-"
-                            android:textColor="@color/colorAccent"/>
+                            android:text="- "
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/daily_limit_calculation_text_size"/>
 
-                        <TextView
-                            android:id="@+id/text_main_day_spent"
-                            android:layout_width="0dp"
+                        <com.github.blackenwhite.costplanner.common.CustomEditText
+                            android:id="@+id/text_main_daily_spent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:textSize="17sp"
+                            android:background="@android:color/transparent"
+                            android:cursorVisible="true"
+                            android:inputType="numberDecimal"
+                            android:longClickable="false"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/daily_limit_calculation_text_size"
                             android:textStyle="italic"
-                            android:typeface="sans"
-                            android:textColor="@color/colorAccent"/>
+                            android:typeface="sans"/>
 
-                    </LinearLayout>
+                    </TableRow>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    <TableRow
+                        android:id="@+id/layout_main_limit_daily_balance">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3"
-                            android:textSize="17sp"
-                            android:text="="
-                            android:textColor="@color/colorGreen"/>
+                            android:text="= "
+                            android:textColor="@color/colorGreen"
+                            android:textSize="@dimen/daily_limit_calculation_text_size"/>
 
                         <TextView
-                            android:id="@+id/text_main_day_balance"
-                            android:layout_width="0dp"
+                            android:id="@+id/text_main_daily_balance"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:textSize="17sp"
+                            android:textColor="@color/colorGreen"
+                            android:textSize="@dimen/daily_limit_calculation_text_size"
                             android:textStyle="bold"
-                            android:typeface="sans"
-                            android:textColor="@color/colorGreen"/>
-                    </LinearLayout>
+                            android:typeface="sans"/>
+                    </TableRow>
 
-                </LinearLayout>
+                </TableLayout>
+
+
+                <!--Label shown in case there is no limit defined for the day-->
+                <TextView
+                    android:id="@+id/main_label_day_no_limit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/label_main_day_no_limit"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp"
+                    android:textStyle="italic"
+                    android:typeface="sans"/>
+
+                <!-- [END] daily limit calculations-->
 
             </RelativeLayout>
 
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_button_add_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"
             android:src="@drawable/button_add"
-            app:layout_anchor="@id/expenses_layout"
+            app:layout_anchor="@id/layout_main"
             app:layout_anchorGravity="bottom|right|end"/>
 
     </android.support.design.widget.CoordinatorLayout>

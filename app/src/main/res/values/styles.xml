@@ -11,9 +11,9 @@
         <!--<item name="colorPrimaryDark">@color/colorOrange</item>-->
         <!--<item name="colorAccent">@color/colorOrange</item>-->
 
-        <item name="android:textColorHint">@color/colorHint</item>
+        <item name="android:textColorHint">@color/colorGrey</item>
 
-        <item name="android:windowBackground">@color/colorBlue</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
         <!--<item name="android:windowBackground">@drawable/background</item>-->
     </style>
 
