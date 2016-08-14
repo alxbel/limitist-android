@@ -89,7 +89,7 @@ public class LimitsActivity extends AppCompatActivity {
                                         mLimitDailyStorage.updateLimits(limitMonthly.createDailyLimits());
 
                                         mLimitMonthlyStorage.dPrintAllLimitsMonthly();
-                                        mLimitDailyStorage.dPrintAllLimitsDaily(limitMonthly.getId());
+                                        mLimitDailyStorage.printAllLimitsDaily(limitMonthly.getId());
                                     } else {
                                         ResourceManager.showMessage(msgIncorrect);
                                     }
@@ -106,7 +106,7 @@ public class LimitsActivity extends AppCompatActivity {
                                     mLimitDailyStorage.addLimits(newLimitMonthly.createDailyLimits());
 
                                     mLimitMonthlyStorage.dPrintAllLimitsMonthly();
-                                    mLimitDailyStorage.dPrintAllLimitsDaily(newLimitMonthly.getId());
+                                    mLimitDailyStorage.printAllLimitsDaily(newLimitMonthly.getId());
                                 } else {
                                     ResourceManager.showMessage(msgIncorrect);
                                 }

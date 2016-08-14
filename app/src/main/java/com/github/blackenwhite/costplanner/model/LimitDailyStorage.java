@@ -32,7 +32,7 @@ public class LimitDailyStorage {
         mDatabase = LimitDbHelper.get(context).getWritableDatabase();
     }
 
-    public void dPrintAllLimitsDaily() {
+    public void printAllLimitsDaily() {
         Log.d(TAG, "== Printing all daily limits ==");
         for (LimitDaily limitDaily : getLimitsDaily()) {
             Log.d(TAG, limitDaily.toString());
@@ -40,7 +40,7 @@ public class LimitDailyStorage {
         Log.d(TAG, "== End of output ==");
     }
 
-    public void dPrintAllLimitsDaily(String limitMonthlyId) {
+    public void printAllLimitsDaily(String limitMonthlyId) {
         LimitMonthly limitMonthly = LimitMonthlyStorage.get(mContext).getLimitMonthly(limitMonthlyId);
         Log.d(TAG, "== Printing all daily limits for [" + limitMonthly.getYear() + " " + limitMonthly.getMonthName() + "] ==");
         for (LimitDaily limitDaily : getLimitsDaily(limitMonthlyId)) {

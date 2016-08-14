@@ -24,6 +24,16 @@ public class ResourceManager {
     }
 
     public static void showMessage(int msgId) {
-        Toast.makeText(sContext, sContext.getString(msgId), Toast.LENGTH_LONG).show();
+        Toast.makeText(sContext, sContext.getString(msgId), Toast.LENGTH_LONG)
+                .show();
+    }
+
+    public static void showQuickMessage(String msg) {
+        Toast.makeText(sContext, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showQuickMessage(int msgId) {
+        Toast.makeText(sContext, sContext.getString(msgId), Toast.LENGTH_SHORT)
+                .show();
     }
 }

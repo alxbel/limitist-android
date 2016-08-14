@@ -143,11 +143,13 @@
                 <!--[START] Daily limit calculations-->
                 <TableLayout
                     android:id="@+id/main_limit_daily_calculations"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true">
 
-                    <TableRow>
+                    <TableRow
+                        android:layout_marginBottom="@dimen/row_margin"
+                        android:gravity="center_horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -165,10 +167,15 @@
                             android:textStyle="italic"
                             android:typeface="sans"/>
 
+                        <ImageView/>
+
                     </TableRow>
 
                     <TableRow
-                        android:id="@+id/layout_main_limit_daily_minus">
+                        android:id="@+id/layout_main_limit_daily_spent"
+                        android:background="@color/colorGreyLighter"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/row_margin">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -190,10 +197,23 @@
                             android:textStyle="italic"
                             android:typeface="sans"/>
 
+                        <ImageView
+                            android:id="@+id/icon_info_spent"
+                            android:src="@drawable/ic_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"/>
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text=" edit "/>-->
+
                     </TableRow>
 
                     <TableRow
-                        android:id="@+id/layout_main_limit_daily_balance">
+                        android:id="@+id/layout_main_limit_daily_balance"
+                        android:gravity="center_horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -210,6 +230,33 @@
                             android:textSize="@dimen/daily_limit_calculation_text_size"
                             android:textStyle="bold"
                             android:typeface="sans"/>
+
+                        <ImageView/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/layout_main_limit_daily_balance_negative"
+                        android:gravity="center_horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="= "
+                            android:textColor="@color/colorRed"
+                            android:textSize="@dimen/daily_limit_calculation_text_size"/>
+
+                        <TextView
+                            android:id="@+id/text_main_daily_balance_negative"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorRed"
+                            android:textSize="@dimen/daily_limit_calculation_text_size"
+                            android:textStyle="bold"
+                            android:typeface="sans"/>
+
+                        <ImageView/>
+
                     </TableRow>
 
                 </TableLayout>

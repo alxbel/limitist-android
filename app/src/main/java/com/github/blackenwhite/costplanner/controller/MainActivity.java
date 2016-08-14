@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.method.KeyListener;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,6 +29,8 @@ import com.github.blackenwhite.costplanner.R;
 import com.github.blackenwhite.costplanner.common.CustomEditText;
 import com.github.blackenwhite.costplanner.model.DateManager;
 import com.github.blackenwhite.costplanner.dao.file.Settings;
+import com.github.blackenwhite.costplanner.model.Expense;
+import com.github.blackenwhite.costplanner.model.ExpenseStorage;
 import com.github.blackenwhite.costplanner.model.LimitDaily;
 import com.github.blackenwhite.costplanner.model.LimitDailyStorage;
 import com.github.blackenwhite.costplanner.model.LimitMonthly;
@@ -40,7 +44,8 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements
+        View.OnClickListener, View.OnTouchListener, View.OnLongClickListener {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE_SETTINGS = 10;
     private static final int REQUEST_CODE_LIMITS = 11;
@@ -56,10 +61,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LimitDaily mLimitDaily;
     private TableLayout mLimitDailyCalculationsLayout;
     private TableRow mLimitDailySpentLayout;
+    private ImageView mIconInfoLimitSpent;
+
     private TableRow mLimitDailyBalanceLayout;
-    private TextView mLimitDailyText;
-    private CustomEditText mLimitDailySpentText;
     private TextView mLimitDailyBalanceText;
+    private TableRow mLimitDailyBalanceNegativeLayout;
+    private TextView mLimitDailyBalanceNegativeText;
+
+    private TextView mLimitDailyText;
+    private KeyListener mSpentKeyListener;
+    private CustomEditText mLimitDailySpentText;
     private TextView mNoDailyLimitLabel;
 
     private LimitMonthly mLimitMonthly;
@@ -85,43 +96,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
+        // Content layout
         mLayout = (LinearLayout) findViewById(R.id.layout_main);
         mLayout.setOnTouchListener(this);
 
+        // Current month and year upper label
         mMonthYearText = (TextView) findViewById(R.id.text_main_month_year);
         String monthYearString = String.format("%s %s", DateManager.get().getCurrentMonth(), DateManager.get().getCurrentYear());
         mMonthYearText.setText(monthYearString);
 
+        // Monthly limit calculations area
         mLimitMonthlyCalculationsLayout = (TableLayout)findViewById(R.id.main_limit_monthly_calculations);
         mLimitMonthlyText = (TextView) findViewById(R.id.text_main_month_limit);
         mNoMonthlyLimitLabel = (TextView)findViewById(R.id.main_label_month_no_limit);
 
+        // Current date (ddd dd.mm.yyyy) center label
         mDateText = (TextView) findViewById(R.id.text_main_date);
         mDateText.setText(DateManager.get().getDate());
         mDay = DateManager.get().getCurrentDayOfMonth();
 
+        // Daily limit calculations area
         mLimitDailyCalculationsLayout = (TableLayout) findViewById(R.id.main_limit_daily_calculations);
-        mLimitDailySpentLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_minus);
-        mLimitDailyBalanceLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_balance);
-        mLimitDailyText = (TextView) findViewById(R.id.text_main_day_limit);
+        mLimitDailySpentLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_spent);
 
+        mIconInfoLimitSpent = (ImageView) findViewById(R.id.icon_info_spent);
+        mIconInfoLimitSpent.setOnClickListener(this);
+
+        mLimitDailyText = (TextView) findViewById(R.id.text_main_day_limit);
         mLimitDailySpentText = (CustomEditText) findViewById(R.id.text_main_daily_spent);
         mLimitDailySpentText.setCustomSelectionActionModeCallback(Factory.createTextSelectionDisablerCallback());
 
-        final KeyListener keyListener = mLimitDailySpentText.getKeyListener();
+        mSpentKeyListener = mLimitDailySpentText.getKeyListener();
+
         mLimitDailySpentText.setKeyListener(null);
-        mLimitDailySpentText.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mLimitDailySpentText.getKeyListener() == null) {
-                    mLimitDailySpentText.setKeyListener(keyListener);
-                    mLimitDailySpentText.setText(Factory.createUnderlinedString(mLimitDaily.getSpent()));
-                    mLimitDailySpentText.setSelection(String.valueOf(mLimitDaily.getSpent()).length());
-                    Helper.showKeyboard(getApplicationContext());
-                }
-                return false;
-            }
-        });
+        mLimitDailySpentText.setOnLongClickListener(this);
+        mLimitDailySpentLayout.setOnLongClickListener(this);
+
         mLimitDailySpentText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(final View view, int keyCode, KeyEvent event) {
@@ -133,10 +143,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        mLimitDailyBalanceLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_balance);
         mLimitDailyBalanceText = (TextView) findViewById(R.id.text_main_daily_balance);
+        mLimitDailyBalanceNegativeLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_balance_negative);
+        mLimitDailyBalanceNegativeText = (TextView) findViewById(R.id.text_main_daily_balance_negative);
 
         mNoDailyLimitLabel = (TextView) findViewById(R.id.main_label_day_no_limit);
 
+        // Add expense button
         mButtonAddExpense = (FloatingActionButton) findViewById(R.id.main_button_add_expense);
         mButtonAddExpense.setOnClickListener(this);
     }
@@ -200,14 +214,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void call(Integer spent) {
                         Helper.hideKeyboard(MainActivity.this);
+
+                        Expense expense = new Expense();
+                        expense.setLimitDailyId(mLimitDaily.getId());
+                        expense.setValue(spent);
+                        if (ExpenseStorage.get(getApplicationContext()).addExpense(expense) != -1) {
+                            // do stuff
+                        }
+
                         spent += mLimitDaily.getSpent();
                         mLimitDaily.setSpent(spent);
                         LimitDailyStorage.get(MainActivity.this).updateLimit(mLimitDaily);
+
                         updateView();
                     }
                 }).show();
                 break;
+            case R.id.icon_info_spent:
+                ResourceManager.showQuickMessage(R.string.toast_spent_hint);
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v.getId() == R.id.layout_main_limit_daily_spent || v.getId() == R.id.text_main_daily_spent) {
+            if (mLimitDailySpentText.getKeyListener() == null) {
+                mLimitDailySpentText.setKeyListener(mSpentKeyListener);
+                mLimitDailySpentText.setText(Factory.createUnderlinedString(mLimitDaily.getSpent()));
+                mLimitDailySpentText.setSelection(String.valueOf(mLimitDaily.getSpent()).length());
+                Helper.showKeyboard(getApplicationContext());
+            }
+        }
+        return false;
     }
 
     @Override
@@ -272,17 +310,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (mLimitDaily != null) {
+            // debug message
+            ExpenseStorage.get(this).printExpensesForDailyLimit(mLimitDaily.getId());
+            Log.d(TAG, "cursor: " + String.valueOf(ExpenseStorage.get(this).getSum(mLimitDaily.getId())));
+
             mNoDailyLimitLabel.setVisibility(View.GONE);
             mLimitDailyCalculationsLayout.setVisibility(View.VISIBLE);
             mLimitDailyText.setText(String.format(FORMAT_DATA, mLimitDaily.getLimitValue()));
+
             if (mLimitDaily.getSpent() != 0) {
                 mLimitDailySpentLayout.setVisibility(View.VISIBLE);
-                mLimitDailyBalanceLayout.setVisibility(View.VISIBLE);
                 mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
-                mLimitDailyBalanceText.setText(String.format(FORMAT_DATA, mLimitDaily.getBalance()));
+
+                if (mLimitDaily.getBalance() > 0) {
+                    mLimitDailyBalanceLayout.setVisibility(View.VISIBLE);
+                    mLimitDailyBalanceText.setText(String.format(FORMAT_DATA, mLimitDaily.getBalance()));
+                    mLimitDailyBalanceNegativeLayout.setVisibility(View.GONE);
+                } else {
+                    mLimitDailyBalanceLayout.setVisibility(View.GONE);
+                    mLimitDailyBalanceNegativeLayout.setVisibility(View.VISIBLE);
+                    mLimitDailyBalanceNegativeText.setText(String.format(FORMAT_DATA, mLimitDaily.getBalance()));
+                }
             } else {
                 mLimitDailySpentLayout.setVisibility(View.GONE);
                 mLimitDailyBalanceLayout.setVisibility(View.GONE);
+                mLimitDailyBalanceNegativeLayout.setVisibility(View.GONE);
             }
         } else {
             mNoDailyLimitLabel.setVisibility(View.VISIBLE);

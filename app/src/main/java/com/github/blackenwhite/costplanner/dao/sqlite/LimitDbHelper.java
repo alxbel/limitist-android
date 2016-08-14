@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitMonthlyTable;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitDailyTable;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.ExpenseTable;
 
 public class LimitDbHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
@@ -25,6 +26,15 @@ public class LimitDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        createLimitMonthlyTable(db);
+        createLimitDailyTable(db);
+        createExpenseTable(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
+
+    private void createLimitMonthlyTable(SQLiteDatabase db) {
         db.execSQL("create table " + LimitMonthlyTable.NAME + "(" +
                 LimitMonthlyTable.Cols.ID + " text primary key, " +
                 LimitMonthlyTable.Cols.YEAR + " integer, " +
@@ -32,7 +42,9 @@ public class LimitDbHelper extends SQLiteOpenHelper {
                 LimitMonthlyTable.Cols.LIMIT_VALUE + " integer" +
                 ")"
         );
+    }
 
+    private void createLimitDailyTable(SQLiteDatabase db) {
         db.execSQL("create table " + LimitDailyTable.NAME + "(" +
                 LimitDailyTable.Cols.ID + " text primary key, " +
                 LimitDailyTable.Cols.LIMIT_MONTHLY_ID + " text, " +
@@ -43,8 +55,15 @@ public class LimitDbHelper extends SQLiteOpenHelper {
         );
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    private void createExpenseTable(SQLiteDatabase db) {
+        db.execSQL("create table " + ExpenseTable.NAME + "(" +
+                ExpenseTable.Cols.ID + " text primary key, " +
+                ExpenseTable.Cols.LIMIT_DAILY_ID + " text, " +
+                ExpenseTable.Cols.EXPENSE_VALUE + " integer, " +
+                ExpenseTable.Cols.EXPENSE_TITLE + " text, " +
+                ExpenseTable.Cols.EXPENSE_CATEGORY + " text, " +
+                "foreign key(" + ExpenseTable.Cols.LIMIT_DAILY_ID + ") " +
+                "references " + LimitDailyTable.NAME + "(" + LimitDailyTable.Cols.ID + "))"
+        );
     }
 }

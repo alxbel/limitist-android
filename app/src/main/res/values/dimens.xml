@@ -5,4 +5,5 @@
 
     <dimen name="daily_limit_calculation_text_size">22sp</dimen>
     <dimen name="monthly_limit_calculation_text_size">22sp</dimen>
+    <dimen name="row_margin">8dp</dimen>
 </resources>

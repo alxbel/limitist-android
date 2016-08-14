@@ -21,14 +21,6 @@ public class LimitDaily {
         mLimitValue = limitValue;
     }
 
-//    @Override
-//    public String toString() {
-//        return String.format(Settings.getLocale(),
-//                "[id=%s] day:%d lim:%d",
-//                mId, mDay, mLimitValue);
-//    }
-
-
     @Override
     public String toString() {
         return "LimitDaily{" +

@@ -9,6 +9,7 @@
 
     <color name="colorOrange">#FFA500</color>
     <color name="colorGreen">#008000</color>
+    <color name="colorRed">#800006</color>
     <color name="colorViolet">#4F4399</color>
     <color name="colorYellow">#ffff7f</color>
 </resources>

@@ -33,15 +33,6 @@ public class DateManager {
 
     private Context mContext;
 
-
-//    private DateManager() {
-//        mContext = MainActivity.getContext();
-//        mLocalDate = new LocalDate();
-//        mMonthColl = new BiMap<>();
-//        mDateFormatter = DateTimeFormat.forPattern(DATE_FORMAT);
-//        setLocale(Settings.getLangPref(mContext));
-//    }
-
     private DateManager(Context context) {
         mContext = context;
         mLocalDate = new LocalDate();
@@ -51,9 +42,6 @@ public class DateManager {
     }
 
     public static DateManager get() {
-//        if (sDateManager == null) {
-//            sDateManager = new DateManager();
-//        }
         return sDateManager;
     }
 
