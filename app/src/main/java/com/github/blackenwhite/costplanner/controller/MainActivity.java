@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements
         mSpentKeyListener = mLimitDailySpentText.getKeyListener();
 
         mLimitDailySpentText.setKeyListener(null);
-        mLimitDailySpentText.setOnLongClickListener(this);
-        mLimitDailySpentLayout.setOnLongClickListener(this);
+        //mLimitDailySpentText.setOnLongClickListener(this);
+        //mLimitDailySpentLayout.setOnLongClickListener(this);
 
         mLimitDailySpentText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -219,14 +219,14 @@ public class MainActivity extends AppCompatActivity implements
                         expense.setLimitDailyId(mLimitDaily.getId());
                         expense.setValue(spent);
                         if (ExpenseStorage.get(getApplicationContext()).addExpense(expense) != -1) {
-                            // do stuff
+                            updateView();
                         }
 
-                        spent += mLimitDaily.getSpent();
-                        mLimitDaily.setSpent(spent);
-                        LimitDailyStorage.get(MainActivity.this).updateLimit(mLimitDaily);
+//                        spent += mLimitDaily.getSpent();
+//                        mLimitDaily.setSpent(spent);
+//                        LimitDailyStorage.get(MainActivity.this).updateLimit(mLimitDaily);
 
-                        updateView();
+//                        updateView();
                     }
                 }).show();
                 break;
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        acceptManualInput();
+//        acceptManualInput();
         return false;
     }
 
@@ -318,7 +318,28 @@ public class MainActivity extends AppCompatActivity implements
             mLimitDailyCalculationsLayout.setVisibility(View.VISIBLE);
             mLimitDailyText.setText(String.format(FORMAT_DATA, mLimitDaily.getLimitValue()));
 
-            if (mLimitDaily.getSpent() != 0) {
+//            if (mLimitDaily.getSpent() != 0) {
+//                mLimitDailySpentLayout.setVisibility(View.VISIBLE);
+//                mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
+//
+//                if (mLimitDaily.getBalance() > 0) {
+//                    mLimitDailyBalanceLayout.setVisibility(View.VISIBLE);
+//                    mLimitDailyBalanceText.setText(String.format(FORMAT_DATA, mLimitDaily.getBalance()));
+//                    mLimitDailyBalanceNegativeLayout.setVisibility(View.GONE);
+//                } else {
+//                    mLimitDailyBalanceLayout.setVisibility(View.GONE);
+//                    mLimitDailyBalanceNegativeLayout.setVisibility(View.VISIBLE);
+//                    mLimitDailyBalanceNegativeText.setText(String.format(FORMAT_DATA, mLimitDaily.getBalance()));
+//                }
+//            } else {
+//                mLimitDailySpentLayout.setVisibility(View.GONE);
+//                mLimitDailyBalanceLayout.setVisibility(View.GONE);
+//                mLimitDailyBalanceNegativeLayout.setVisibility(View.GONE);
+//            }
+
+            Integer spentSum = ExpenseStorage.get(this).getSum(mLimitDaily.getId());
+            if (spentSum != null) {
+                mLimitDaily.setSpent(spentSum);
                 mLimitDailySpentLayout.setVisibility(View.VISIBLE);
                 mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
 
