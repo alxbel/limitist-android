@@ -41,4 +41,9 @@
     <string name="dialog_main_add_expense_title">Add expense</string>
     <string name="toast_spent_hint">Long click to edit</string>
     <string name="error_no_monthly_limit">You need to set up monthly limit</string>
+    <string name="dialog_title_expenses">Expenses</string>
+    <string name="model_expense_default_category">other</string>
+    <string name="dialog_expense_header_category">Категория</string>
+    <string name="dialog_expense_header_title">Заголовок</string>
+    <string name="dialog_expense_header_value">Значение</string>
 </resources>

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".controller.MainActivity">
+            android:name=".controller.ExpensesActivityImpl">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -18,15 +18,15 @@
         </activity>
         <activity
             android:name=".controller.SettingsActivity"
-            android:parentActivityName=".controller.MainActivity">
+            android:parentActivityName=".controller.ExpensesActivityImpl">
         </activity>
         <activity
             android:name=".controller.LimitsActivity"
-            android:parentActivityName=".controller.MainActivity">
+            android:parentActivityName=".controller.ExpensesActivityImpl">
         </activity>
         <activity
             android:name=".controller.AboutActivity"
-            android:parentActivityName=".controller.MainActivity">
+            android:parentActivityName=".controller.ExpensesActivityImpl">
         </activity>
     </application>
 

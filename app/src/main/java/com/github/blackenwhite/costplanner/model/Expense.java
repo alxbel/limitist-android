@@ -1,5 +1,8 @@
 package com.github.blackenwhite.costplanner.model;
 
+import com.github.blackenwhite.costplanner.R;
+import com.github.blackenwhite.costplanner.util.ResourceManager;
+
 import java.util.UUID;
 
 public class Expense {
@@ -11,6 +14,8 @@ public class Expense {
 
     public Expense() {
         mId = UUID.randomUUID().toString();
+        mCategory = ResourceManager.getString(R.string.model_expense_default_category);
+        mTitle = "";
     }
 
     public Expense(String id, String limitDailyId, String title, String category, int value) {

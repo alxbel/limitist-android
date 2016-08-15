@@ -66,6 +66,18 @@ public class ExpenseStorage {
         return mDatabase.insert(LimitDbSchema.ExpenseTable.NAME, null, values);
     }
 
+    public void deleteExpenses(List<Expense> expenses) {
+        mDatabase.beginTransaction();
+        for (Expense expense : expenses) {
+            mDatabase.delete(
+                    LimitDbSchema.ExpenseTable.NAME,
+                    LimitDbSchema.ExpenseTable.Cols.ID + " = ?",
+                    new String[]{expense.getId()});
+        }
+        mDatabase.setTransactionSuccessful();
+        mDatabase.endTransaction();
+    }
+
     public Integer getSum(String dailyId) {
         Cursor cursor = mDatabase.rawQuery(
                 "SELECT SUM(" + LimitDbSchema.ExpenseTable.Cols.EXPENSE_VALUE + ") FROM " +

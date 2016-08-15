@@ -43,4 +43,9 @@
     <string name="dialog_main_add_expense_title">Добавить расход</string>
     <string name="toast_spent_hint">Удерж. для редактирования</string>
     <string name="error_no_monthly_limit">Задайте месячный лимит</string>
+    <string name="dialog_title_expenses">Расходы</string>
+    <string name="model_expense_default_category">другое</string>
+    <string name="dialog_expense_header_category">Категория</string>
+    <string name="dialog_expense_header_title">Заголовок</string>
+    <string name="dialog_expense_header_value">Значение</string>
 </resources>
