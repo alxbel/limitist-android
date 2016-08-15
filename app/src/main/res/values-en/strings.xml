@@ -38,6 +38,7 @@
     <string name="label_main_month_no_limit">Limit is not set</string>
     <string name="text_main_label_month">Month</string>
     <string name="text_main_label_day">Day</string>
-    <string name="dialog_main_add_expense_title">Increase expense</string>
+    <string name="dialog_main_add_expense_title">Add expense</string>
     <string name="toast_spent_hint">Long click to edit</string>
+    <string name="error_no_monthly_limit">You need to set up monthly limit</string>
 </resources>

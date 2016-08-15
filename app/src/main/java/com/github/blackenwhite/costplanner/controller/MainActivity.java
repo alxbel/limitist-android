@@ -209,18 +209,24 @@ public class MainActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_button_add_expense:
+                if (mNoDailyLimitLabel.getVisibility() == View.VISIBLE) {
+                    ResourceManager.showMessage(R.string.error_no_monthly_limit);
+                    return;
+                }
                 Helper.showKeyboard(this);
                 getAddExpenseDialog(new Callback<Integer>() {
                     @Override
                     public void call(Integer spent) {
                         Helper.hideKeyboard(MainActivity.this);
 
-                        Expense expense = new Expense();
-                        expense.setLimitDailyId(mLimitDaily.getId());
-                        expense.setValue(spent);
-                        if (ExpenseStorage.get(getApplicationContext()).addExpense(expense) != -1) {
-                            updateView();
-                        }
+                        try {
+                            Expense expense = new Expense();
+                            expense.setLimitDailyId(mLimitDaily.getId());
+                            expense.setValue(spent);
+                            if (ExpenseStorage.get(getApplicationContext()).addExpense(expense) != -1) {
+                                updateView();
+                            }
+                        } catch (NullPointerException ignored){}
 
 //                        spent += mLimitDaily.getSpent();
 //                        mLimitDaily.setSpent(spent);
@@ -251,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 //        acceptManualInput();
+        Helper.hideKeyboard(this);
         return false;
     }
 
@@ -338,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 
             Integer spentSum = ExpenseStorage.get(this).getSum(mLimitDaily.getId());
-            if (spentSum != null) {
+            if (spentSum != null && !spentSum.equals(0)) {
                 mLimitDaily.setSpent(spentSum);
                 mLimitDailySpentLayout.setVisibility(View.VISIBLE);
                 mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
