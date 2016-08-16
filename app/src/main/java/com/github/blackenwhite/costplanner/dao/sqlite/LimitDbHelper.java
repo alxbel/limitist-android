@@ -32,7 +32,9 @@ public class LimitDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
 
     private void createLimitMonthlyTable(SQLiteDatabase db) {
         db.execSQL("create table " + LimitMonthlyTable.NAME + "(" +

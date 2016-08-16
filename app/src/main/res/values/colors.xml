@@ -6,6 +6,7 @@
     <color name="colorGrey">#b9b7b7</color>
     <color name="colorGreyLighter">#d7d6d6</color>
     <color name="colorBackground">#e6e9fd</color>
+    <color name="colorWhite">#FFFF</color>
 
     <color name="colorOrange">#FFA500</color>
     <color name="colorGreen">#008000</color>

@@ -10,10 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.text.method.KeyListener;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -39,11 +38,9 @@ import com.github.blackenwhite.costplanner.model.LimitMonthlyStorage;
 import com.github.blackenwhite.costplanner.util.Factory;
 import com.github.blackenwhite.costplanner.util.Helper;
 import com.github.blackenwhite.costplanner.util.ResourceManager;
-import com.github.blackenwhite.costplanner.common.Callback;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -172,35 +169,13 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
                     return;
                 }
                 Helper.showKeyboard(this);
-                getAddExpenseDialog(new Callback<Integer>() {
-                    @Override
-                    public void call(Integer spent) {
-                        Helper.hideKeyboard(ExpensesActivityImpl.this);
+                getAddExpenseDialog().show();
 
-                        try {
-                            Expense expense = new Expense();
-                            expense.setLimitDailyId(mLimitDaily.getId());
-                            expense.setValue(spent);
-                            if (ExpenseStorage.get(getApplicationContext()).addExpense(expense) != -1) {
-                                if (mExpenses != null) {
-                                    mExpenses.add(expense);
-                                }
-                                updateView();
-                            }
-                        } catch (NullPointerException ignored) {
-                        }
-
-//                        spent += mLimitDaily.getSpent();
-//                        mLimitDaily.setSpent(spent);
-//                        LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(mLimitDaily);
-
-//                        updateView();
-                    }
-                }).show();
                 break;
             case R.id.icon_info_spent:
-//                ResourceManager.showQuickMessage(R.string.toast_spent_hint);
                 new ExpensesDialog(this, mExpenses).show();
+                break;
+            default: break;
         }
     }
 
@@ -233,7 +208,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     @Override
     public void updateExpenseListForDailyLimit() {
         if (mLimitDaily != null) {
-            mExpenses = new LinkedList<>(ExpenseStorage.get(this).getExpenses(mLimitDaily.getId()));
+            mExpenses.addAll(ExpenseStorage.get(this).getExpenses(mLimitDaily.getId()));
         }
     }
 
@@ -273,24 +248,24 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
         startActivityForResult(intent, REQUEST_CODE_LIMITS);
     }
 
-    private void acceptManualInput() {
-        mLimitDailySpentText.setKeyListener(null);
-        Helper.hideKeyboard(this);
-        try {
-            Integer spent = Integer.valueOf(mLimitDailySpentText.getText().toString());
-            if (mLimitDaily.getSpent() != spent) {
-                mLimitDaily.setSpent(spent);
-                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(mLimitDaily);
-            }
-        } catch (NumberFormatException e) {
-            if (mLimitDailySpentText.getText().toString().equals("")) {
-                mLimitDaily.setSpent(0);
-                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(mLimitDaily);
-            }
-        }
-        mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
-        updateView();
-    }
+//    private void acceptManualInput() {
+//        mLimitDailySpentText.setKeyListener(null);
+//        Helper.hideKeyboard(this);
+//        try {
+//            Integer spent = Integer.valueOf(mLimitDailySpentText.getText().toString());
+//            if (mLimitDaily.getSpent() != spent) {
+//                mLimitDaily.setSpent(spent);
+//                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(mLimitDaily);
+//            }
+//        } catch (NumberFormatException e) {
+//            if (mLimitDailySpentText.getText().toString().equals("")) {
+//                mLimitDaily.setSpent(0);
+//                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(mLimitDaily);
+//            }
+//        }
+//        mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
+//        updateView();
+//    }
 
     private void updateView() {
         if (mLimitDaily == null) {
@@ -340,18 +315,32 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
         }
     }
 
-    private AlertDialog getAddExpenseDialog(final Callback<Integer> callback) {
+    private AlertDialog getAddExpenseDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(R.string.dialog_main_add_expense_title);
 
         LayoutInflater inflater = getLayoutInflater();
+
         LinearLayout dialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_main_add_expense, null);
-        final EditText limitInput = (EditText) dialogLayout.findViewById(R.id.limit_input);
 
-//        final Spinner categorySpinner = Factory.createSpinner(
-//                this, dialogLayout,
-//                R.id.spinner_category, R.array.array_categories);
+        final EditText expenseValueInput = (EditText) dialogLayout.findViewById(R.id.limit_input);
 
+        final TextView detailsButton = (TextView) dialogLayout.findViewById(R.id.dialog_add_expense_btn_details);
+
+        final LinearLayout detailsLayout = (LinearLayout) dialogLayout.findViewById(R.id.dialog_add_expense_details_layout);
+        final EditText expenseTitleInput = (EditText) detailsLayout.findViewById(R.id.dialog_add_expense_title);
+        final Spinner categorySpinner = Factory.createSpinner(
+                this, dialogLayout,
+                R.id.dialog_add_expense_spinner_category, R.array.array_categories);
+
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detailsButton.setVisibility(View.GONE);
+                detailsLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        
         alertDialog.setView(dialogLayout);
 
         alertDialog.setPositiveButton(R.string.dialog_ok,
@@ -359,11 +348,26 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            Integer limitValue = Integer.valueOf(limitInput.getText().toString());
-                            callback.call(limitValue);
-                        } catch (NumberFormatException ignored) {
-                            Helper.hideKeyboard(ExpensesActivityImpl.this);
+                            Integer value = Integer.valueOf(expenseValueInput.getText().toString());
+                            Expense expense = new Expense();
+                            expense.setLimitDailyId(mLimitDaily.getId());
+                            expense.setValue(value);
+                            if (detailsLayout.getVisibility() == View.VISIBLE) {
+                                expense.setTitle(expenseTitleInput.getText().toString());
+                                expense.setCategory(categorySpinner.getSelectedItem().toString());
+                            }
+
+                            if (ExpenseStorage.get(getApplicationContext()).addExpense(expense) != -1) {
+                                if (mExpenses != null) {
+                                    mExpenses.add(expense);
+                                }
+                                updateView();
+                            }
+                        } catch (NullPointerException | NumberFormatException e) {
+                            e.printStackTrace();
                         }
+
+                        Helper.hideKeyboard(ExpensesActivityImpl.this);
                     }
                 });
 
@@ -396,6 +400,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
         // Daily limit
         mLimitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
+        mExpenses = new LinkedList<>();
         updateExpenseListForDailyLimit();
 
         // Daily limit calculations area

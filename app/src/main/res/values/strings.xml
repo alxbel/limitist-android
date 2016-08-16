@@ -45,7 +45,10 @@
     <string name="error_no_monthly_limit">Задайте месячный лимит</string>
     <string name="dialog_title_expenses">Расходы</string>
     <string name="model_expense_default_category">другое</string>
-    <string name="dialog_expense_header_category">Категория</string>
-    <string name="dialog_expense_header_title">Заголовок</string>
-    <string name="dialog_expense_header_value">Значение</string>
+    <string name="dialog_expenses_header_category">Категория</string>
+    <string name="dialog_expenses_header_title">Заголовок</string>
+    <string name="dialog_expenses_header_value">Значение</string>
+    <string name="dialog_add_expense_label_title">Заголовок</string>
+    <string name="dialog_add_expense_label_category">Категория</string>
+    <string name="dialog_add_expense_btn_details_label">Подробно</string>
 </resources>
