@@ -21,23 +21,23 @@ import com.github.blackenwhite.costplanner.util.ResourceManager;
 public class LimitsActivity extends AppCompatActivity {
     private static final String TAG = "LimitsActivity";
 
-    private LimitMonthlyStorage mLimitMonthlyStorage;
-    private LimitDailyStorage mLimitDailyStorage;
+    private LimitMonthlyStorage limitMonthlyStorage;
+    private LimitDailyStorage limitDailyStorage;
 
-    private TextView mYearLabel;
-    private ListView mMonthListView;
+    private TextView yearLabel;
+    private ListView monthListView;
 
-    private LimitAdapter mMonthAdapter;
-    private Integer mCurrentYear;
+    private LimitAdapter monthAdapter;
+    private Integer currentYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // init members
-        mLimitMonthlyStorage = LimitMonthlyStorage.get(getApplicationContext());
-        mLimitDailyStorage = LimitDailyStorage.get(getApplicationContext());
-        mCurrentYear = DateManager.get().getCurrentYear();
+        limitMonthlyStorage = LimitMonthlyStorage.get(getApplicationContext());
+        limitDailyStorage = LimitDailyStorage.get(getApplicationContext());
+        currentYear = DateManager.get().getCurrentYear();
 
         setContentView(R.layout.activity_limits);
 
@@ -47,8 +47,8 @@ public class LimitsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mYearLabel = (TextView) findViewById(R.id.limits_label_year);
-        mYearLabel.setText(mCurrentYear.toString());
+        yearLabel = (TextView) findViewById(R.id.limits_label_year);
+        yearLabel.setText(currentYear.toString());
 
         setupListView();
     }
@@ -81,37 +81,37 @@ public class LimitsActivity extends AppCompatActivity {
                                     limitMonthly.setLimitValue(limMonthly);
 
                                     /***************** UPDATE MONTHLY LIMIT *******************/
-                                    if (mLimitMonthlyStorage.updateLimitMonthly(limitMonthly)) {
+                                    if (limitMonthlyStorage.updateLimitMonthly(limitMonthly)) {
 
                                         ResourceManager.showMessage(R.string.toast_record_updated);
 
                                         /******************** UPDATE DAILY LIMITS ***********************/
-                                        mLimitDailyStorage.updateLimits(limitMonthly.createDailyLimits());
+                                        limitDailyStorage.updateLimits(limitMonthly.createDailyLimits());
 
-                                        mLimitMonthlyStorage.dPrintAllLimitsMonthly();
-                                        mLimitDailyStorage.printAllLimitsDaily(limitMonthly.getId());
+                                        limitMonthlyStorage.dPrintAllLimitsMonthly();
+                                        limitDailyStorage.printAllLimitsDaily(limitMonthly.getId());
                                     } else {
                                         ResourceManager.showMessage(msgIncorrect);
                                     }
                                 }
                             } else {
-                                LimitMonthly newLimitMonthly = new LimitMonthly(mCurrentYear, DateManager.get().getMonthIndex(month), limMonthly);
+                                LimitMonthly newLimitMonthly = new LimitMonthly(currentYear, DateManager.get().getMonthIndex(month), limMonthly);
 
                                 /****************** INSERT MONTHLY LIMIT ******************/
-                                if (mLimitMonthlyStorage.addLimitMonthly(newLimitMonthly)) {
+                                if (limitMonthlyStorage.addLimitMonthly(newLimitMonthly)) {
 
                                     ResourceManager.showMessage(R.string.toast_record_added);
 
                                     /****************** INSERT DAILY LIMITS *****************/
-                                    mLimitDailyStorage.addLimits(newLimitMonthly.createDailyLimits());
+                                    limitDailyStorage.addLimits(newLimitMonthly.createDailyLimits());
 
-                                    mLimitMonthlyStorage.dPrintAllLimitsMonthly();
-                                    mLimitDailyStorage.printAllLimitsDaily(newLimitMonthly.getId());
+                                    limitMonthlyStorage.dPrintAllLimitsMonthly();
+                                    limitDailyStorage.printAllLimitsDaily(newLimitMonthly.getId());
                                 } else {
                                     ResourceManager.showMessage(msgIncorrect);
                                 }
                             }
-                            mMonthAdapter.notifyDataSetChanged();
+                            monthAdapter.notifyDataSetChanged();
                         } catch (NumberFormatException | NullPointerException e) {
                             ResourceManager.showMessage(R.string.toast_incorrect_value);
                         }
@@ -132,8 +132,8 @@ public class LimitsActivity extends AppCompatActivity {
     }
 
     private void setupListView() {
-        mMonthListView = (ListView)findViewById(R.id.limits_list_months);
-        mMonthAdapter = new LimitAdapter(this, DateManager.get().getRemainsMonthNames());
-        mMonthListView.setAdapter(mMonthAdapter);
+        monthListView = (ListView)findViewById(R.id.limits_list_months);
+        monthAdapter = new LimitAdapter(this, DateManager.get().getRemainsMonthNames());
+        monthListView.setAdapter(monthAdapter);
     }
 }

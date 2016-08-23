@@ -53,35 +53,35 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     private static final int REQUEST_CODE_ABOUT = 12;
     private static final String FORMAT_DATA = "%s";
 
-    private static String sLang;
+    private static String langString;
 
-    private LinearLayout mLayout;
-    private TextView mDateText;
-    private int mDay;
+    private LinearLayout layout;
+    private TextView dateText;
+    private int day;
 
-    private LimitDaily mLimitDaily;
-    private List<Expense> mExpenses;
-    private TableLayout mLimitDailyCalculationsLayout;
-    private TableRow mLimitDailySpentLayout;
-    private ImageView mIconInfoLimitSpent;
+    private LimitDaily limitDaily;
+    private List<Expense> expenses;
+    private TableLayout limitDailyCalculationsLayout;
+    private TableRow limitDailySpentLayout;
+    private ImageView iconInfoLimitSpent;
 
-    private TableRow mLimitDailyBalanceLayout;
-    private TextView mLimitDailyBalanceText;
-    private TableRow mLimitDailyBalanceNegativeLayout;
-    private TextView mLimitDailyBalanceNegativeText;
+    private TableRow limitDailyBalanceLayout;
+    private TextView limitDailyBalanceText;
+    private TableRow limitDailyBalanceNegativeLayout;
+    private TextView limitDailyBalanceNegativeText;
 
-    private TextView mLimitDailyText;
-    private KeyListener mSpentKeyListener;
-    private CustomEditText mLimitDailySpentText;
-    private TextView mNoDailyLimitLabel;
+    private TextView limitDailyText;
+    private KeyListener spentKeyListener;
+    private CustomEditText limitDailySpentText;
+    private TextView noDailyLimitLabel;
 
-    private LimitMonthly mLimitMonthly;
-    private TableLayout mLimitMonthlyCalculationsLayout;
-    private TextView mMonthYearText;
-    private TextView mLimitMonthlyText;
-    private TextView mNoMonthlyLimitLabel;
+    private LimitMonthly limitMonthly;
+    private TableLayout limitMonthlyCalculationsLayout;
+    private TextView monthYearText;
+    private TextView limitMonthlyText;
+    private TextView noMonthlyLimitLabel;
 
-    private FloatingActionButton mButtonAddExpense;
+    private FloatingActionButton buttonAddExpense;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +99,12 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
         setSupportActionBar(toolbar);
 
         // Content layout
-        mLayout = (LinearLayout) findViewById(R.id.layout_main);
-        mLayout.setOnTouchListener(this);
+        layout = (LinearLayout) findViewById(R.id.layout_main);
+        layout.setOnTouchListener(this);
 
         // Add expense button
-        mButtonAddExpense = (FloatingActionButton) findViewById(R.id.main_button_add_expense);
-        mButtonAddExpense.setOnClickListener(this);
+        buttonAddExpense = (FloatingActionButton) findViewById(R.id.main_button_add_expense);
+        buttonAddExpense.setOnClickListener(this);
 
         setData();
     }
@@ -164,7 +164,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_button_add_expense:
-                if (mNoDailyLimitLabel.getVisibility() == View.VISIBLE) {
+                if (noDailyLimitLabel.getVisibility() == View.VISIBLE) {
                     ResourceManager.showMessage(R.string.error_no_monthly_limit);
                     return;
                 }
@@ -173,7 +173,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
                 break;
             case R.id.icon_info_spent:
-                new ExpensesDialog(this, mExpenses).show();
+                new ExpensesDialog(this, expenses).show();
                 break;
             default: break;
         }
@@ -182,10 +182,10 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     @Override
     public boolean onLongClick(View v) {
         if (v.getId() == R.id.layout_main_limit_daily_spent || v.getId() == R.id.text_main_daily_spent) {
-            if (mLimitDailySpentText.getKeyListener() == null) {
-                mLimitDailySpentText.setKeyListener(mSpentKeyListener);
-                mLimitDailySpentText.setText(Factory.createUnderlinedString(mLimitDaily.getSpent()));
-                mLimitDailySpentText.setSelection(String.valueOf(mLimitDaily.getSpent()).length());
+            if (limitDailySpentText.getKeyListener() == null) {
+                limitDailySpentText.setKeyListener(spentKeyListener);
+                limitDailySpentText.setText(Factory.createUnderlinedString(limitDaily.getSpent()));
+                limitDailySpentText.setSelection(String.valueOf(limitDaily.getSpent()).length());
                 Helper.showKeyboard(getApplicationContext());
             }
         }
@@ -207,8 +207,8 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
     @Override
     public void updateExpenseListForDailyLimit() {
-        if (mLimitDaily != null) {
-            mExpenses.addAll(ExpenseStorage.get(this).getExpenses(mLimitDaily.getId()));
+        if (limitDaily != null) {
+            expenses.addAll(ExpenseStorage.get(this).getExpenses(limitDaily.getId()));
         }
     }
 
@@ -223,7 +223,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
         conf.locale = locale;
-        sLang = lang;
+        langString = lang;
         res.updateConfiguration(conf, dm);
         DateManager.get().setLocale(Settings.getLangPref(this));
         Intent refresh = new Intent(this, ExpensesActivityImpl.class);
@@ -232,14 +232,14 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     }
 
     private void updateLocale() {
-        if (sLang == null) {
-            sLang = Settings.getLangPref(this);
-            setLocale(sLang);
+        if (langString == null) {
+            langString = Settings.getLangPref(this);
+            setLocale(langString);
             return;
         }
-        if (!sLang.equalsIgnoreCase(Settings.getLangPref(this))) {
-            sLang = Settings.getLangPref(this);
-            setLocale(sLang);
+        if (!langString.equalsIgnoreCase(Settings.getLangPref(this))) {
+            langString = Settings.getLangPref(this);
+            setLocale(langString);
         }
     }
 
@@ -249,69 +249,69 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     }
 
 //    private void acceptManualInput() {
-//        mLimitDailySpentText.setKeyListener(null);
+//        limitDailySpentText.setKeyListener(null);
 //        Helper.hideKeyboard(this);
 //        try {
-//            Integer spent = Integer.valueOf(mLimitDailySpentText.getText().toString());
-//            if (mLimitDaily.getSpent() != spent) {
-//                mLimitDaily.setSpent(spent);
-//                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(mLimitDaily);
+//            Integer spent = Integer.valueOf(limitDailySpentText.getText().toString());
+//            if (limitDaily.getSpent() != spent) {
+//                limitDaily.setSpent(spent);
+//                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(limitDaily);
 //            }
 //        } catch (NumberFormatException e) {
-//            if (mLimitDailySpentText.getText().toString().equals("")) {
-//                mLimitDaily.setSpent(0);
-//                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(mLimitDaily);
+//            if (limitDailySpentText.getText().toString().equals("")) {
+//                limitDaily.setSpent(0);
+//                LimitDailyStorage.get(ExpensesActivityImpl.this).updateLimit(limitDaily);
 //            }
 //        }
-//        mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
+//        limitDailySpentText.setText(String.format(FORMAT_DATA, limitDaily.getSpent()));
 //        updateView();
 //    }
 
     private void updateView() {
-        if (mLimitDaily == null) {
-            mLimitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
+        if (limitDaily == null) {
+            limitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
         }
 
-        if (mLimitDaily != null) {
-            mNoDailyLimitLabel.setVisibility(View.GONE);
-            mLimitDailyCalculationsLayout.setVisibility(View.VISIBLE);
-            mLimitDailyText.setText(String.format(FORMAT_DATA, mLimitDaily.getLimitValue()));
+        if (limitDaily != null) {
+            noDailyLimitLabel.setVisibility(View.GONE);
+            limitDailyCalculationsLayout.setVisibility(View.VISIBLE);
+            limitDailyText.setText(String.format(FORMAT_DATA, limitDaily.getLimitValue()));
 
-            Integer spentSum = ExpenseStorage.get(this).getSum(mLimitDaily.getId());
+            Integer spentSum = ExpenseStorage.get(this).getSum(limitDaily.getId());
             if (spentSum != null && !spentSum.equals(0)) {
-                mLimitDaily.setSpent(spentSum);
-                mLimitDailySpentLayout.setVisibility(View.VISIBLE);
-                mLimitDailySpentText.setText(String.format(FORMAT_DATA, mLimitDaily.getSpent()));
+                limitDaily.setSpent(spentSum);
+                limitDailySpentLayout.setVisibility(View.VISIBLE);
+                limitDailySpentText.setText(String.format(FORMAT_DATA, limitDaily.getSpent()));
 
-                if (mLimitDaily.getBalance() > 0) {
-                    mLimitDailyBalanceLayout.setVisibility(View.VISIBLE);
-                    mLimitDailyBalanceText.setText(String.format(FORMAT_DATA, mLimitDaily.getBalance()));
-                    mLimitDailyBalanceNegativeLayout.setVisibility(View.GONE);
+                if (limitDaily.getBalance() > 0) {
+                    limitDailyBalanceLayout.setVisibility(View.VISIBLE);
+                    limitDailyBalanceText.setText(String.format(FORMAT_DATA, limitDaily.getBalance()));
+                    limitDailyBalanceNegativeLayout.setVisibility(View.GONE);
                 } else {
-                    mLimitDailyBalanceLayout.setVisibility(View.GONE);
-                    mLimitDailyBalanceNegativeLayout.setVisibility(View.VISIBLE);
-                    mLimitDailyBalanceNegativeText.setText(String.format(FORMAT_DATA, mLimitDaily.getBalance()));
+                    limitDailyBalanceLayout.setVisibility(View.GONE);
+                    limitDailyBalanceNegativeLayout.setVisibility(View.VISIBLE);
+                    limitDailyBalanceNegativeText.setText(String.format(FORMAT_DATA, limitDaily.getBalance()));
                 }
             } else {
-                mLimitDailySpentLayout.setVisibility(View.GONE);
-                mLimitDailyBalanceLayout.setVisibility(View.GONE);
-                mLimitDailyBalanceNegativeLayout.setVisibility(View.GONE);
+                limitDailySpentLayout.setVisibility(View.GONE);
+                limitDailyBalanceLayout.setVisibility(View.GONE);
+                limitDailyBalanceNegativeLayout.setVisibility(View.GONE);
             }
         } else {
-            mNoDailyLimitLabel.setVisibility(View.VISIBLE);
-            mLimitDailyCalculationsLayout.setVisibility(View.GONE);
+            noDailyLimitLabel.setVisibility(View.VISIBLE);
+            limitDailyCalculationsLayout.setVisibility(View.GONE);
         }
 
-        if (mLimitMonthly == null) {
-            mLimitMonthly = LimitMonthlyStorage.get(this).getLimitMonthly(LimitMonthly.generateIdForCurrentDate());
+        if (limitMonthly == null) {
+            limitMonthly = LimitMonthlyStorage.get(this).getLimitMonthly(LimitMonthly.generateIdForCurrentDate());
         }
-        if (mLimitMonthly != null) {
-            mNoMonthlyLimitLabel.setVisibility(View.GONE);
-            mLimitMonthlyCalculationsLayout.setVisibility(View.VISIBLE);
-            mLimitMonthlyText.setText(String.format(FORMAT_DATA, mLimitMonthly.getLimitValue()));
+        if (limitMonthly != null) {
+            noMonthlyLimitLabel.setVisibility(View.GONE);
+            limitMonthlyCalculationsLayout.setVisibility(View.VISIBLE);
+            limitMonthlyText.setText(String.format(FORMAT_DATA, limitMonthly.getLimitValue()));
         } else {
-            mNoMonthlyLimitLabel.setVisibility(View.VISIBLE);
-            mLimitMonthlyCalculationsLayout.setVisibility(View.GONE);
+            noMonthlyLimitLabel.setVisibility(View.VISIBLE);
+            limitMonthlyCalculationsLayout.setVisibility(View.GONE);
         }
     }
 
@@ -350,7 +350,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
                         try {
                             Integer value = Integer.valueOf(expenseValueInput.getText().toString());
                             Expense expense = new Expense();
-                            expense.setLimitDailyId(mLimitDaily.getId());
+                            expense.setLimitDailyId(limitDaily.getId());
                             expense.setValue(value);
                             if (detailsLayout.getVisibility() == View.VISIBLE) {
                                 expense.setTitle(expenseTitleInput.getText().toString());
@@ -358,8 +358,8 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
                             }
 
                             if (ExpenseStorage.get(getApplicationContext()).addExpense(expense) != -1) {
-                                if (mExpenses != null) {
-                                    mExpenses.add(expense);
+                                if (expenses != null) {
+                                    expenses.add(expense);
                                 }
                                 updateView();
                             }
@@ -384,43 +384,43 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
     private void setData() {
         // Current month and year upper label
-        mMonthYearText = (TextView) findViewById(R.id.text_main_month_year);
+        monthYearText = (TextView) findViewById(R.id.text_main_month_year);
         String monthYearString = String.format("%s %s", DateManager.get().getCurrentMonth(), DateManager.get().getCurrentYear());
-        mMonthYearText.setText(monthYearString);
+        monthYearText.setText(monthYearString);
 
         // Monthly limit calculations area
-        mLimitMonthlyCalculationsLayout = (TableLayout) findViewById(R.id.main_limit_monthly_calculations);
-        mLimitMonthlyText = (TextView) findViewById(R.id.text_main_month_limit);
-        mNoMonthlyLimitLabel = (TextView) findViewById(R.id.main_label_month_no_limit);
+        limitMonthlyCalculationsLayout = (TableLayout) findViewById(R.id.main_limit_monthly_calculations);
+        limitMonthlyText = (TextView) findViewById(R.id.text_main_month_limit);
+        noMonthlyLimitLabel = (TextView) findViewById(R.id.main_label_month_no_limit);
 
         // Current date (ddd dd.mm.yyyy) center label
-        mDateText = (TextView) findViewById(R.id.text_main_date);
-        mDateText.setText(DateManager.get().getDate());
-        mDay = DateManager.get().getCurrentDayOfMonth();
+        dateText = (TextView) findViewById(R.id.text_main_date);
+        dateText.setText(DateManager.get().getDate());
+        day = DateManager.get().getCurrentDayOfMonth();
 
         // Daily limit
-        mLimitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
-        mExpenses = new LinkedList<>();
+        limitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForCurrentDate());
+        expenses = new LinkedList<>();
         updateExpenseListForDailyLimit();
 
         // Daily limit calculations area
-        mLimitDailyCalculationsLayout = (TableLayout) findViewById(R.id.main_limit_daily_calculations);
-        mLimitDailySpentLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_spent);
+        limitDailyCalculationsLayout = (TableLayout) findViewById(R.id.main_limit_daily_calculations);
+        limitDailySpentLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_spent);
 
-        mIconInfoLimitSpent = (ImageView) findViewById(R.id.icon_info_spent);
-        mIconInfoLimitSpent.setOnClickListener(this);
+        iconInfoLimitSpent = (ImageView) findViewById(R.id.icon_info_spent);
+        iconInfoLimitSpent.setOnClickListener(this);
 
-        mLimitDailyText = (TextView) findViewById(R.id.text_main_day_limit);
-        mLimitDailySpentText = (CustomEditText) findViewById(R.id.text_main_daily_spent);
-        mLimitDailySpentText.setCustomSelectionActionModeCallback(Factory.createTextSelectionDisablerCallback());
+        limitDailyText = (TextView) findViewById(R.id.text_main_day_limit);
+        limitDailySpentText = (CustomEditText) findViewById(R.id.text_main_daily_spent);
+        limitDailySpentText.setCustomSelectionActionModeCallback(Factory.createTextSelectionDisablerCallback());
 
-        mSpentKeyListener = mLimitDailySpentText.getKeyListener();
+        spentKeyListener = limitDailySpentText.getKeyListener();
 
-        mLimitDailySpentText.setKeyListener(null);
-        //mLimitDailySpentText.setOnLongClickListener(this);
-        //mLimitDailySpentLayout.setOnLongClickListener(this);
+        limitDailySpentText.setKeyListener(null);
+        //limitDailySpentText.setOnLongClickListener(this);
+        //limitDailySpentLayout.setOnLongClickListener(this);
 
-//        mLimitDailySpentText.setOnKeyListener(new View.OnKeyListener() {
+//        limitDailySpentText.setOnKeyListener(new View.OnKeyListener() {
 //            @Override
 //            public boolean onKey(final View view, int keyCode, KeyEvent event) {
 //                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
@@ -431,11 +431,11 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 //            }
 //        });
 
-        mLimitDailyBalanceLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_balance);
-        mLimitDailyBalanceText = (TextView) findViewById(R.id.text_main_daily_balance);
-        mLimitDailyBalanceNegativeLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_balance_negative);
-        mLimitDailyBalanceNegativeText = (TextView) findViewById(R.id.text_main_daily_balance_negative);
+        limitDailyBalanceLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_balance);
+        limitDailyBalanceText = (TextView) findViewById(R.id.text_main_daily_balance);
+        limitDailyBalanceNegativeLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_balance_negative);
+        limitDailyBalanceNegativeText = (TextView) findViewById(R.id.text_main_daily_balance_negative);
 
-        mNoDailyLimitLabel = (TextView) findViewById(R.id.main_label_day_no_limit);
+        noDailyLimitLabel = (TextView) findViewById(R.id.main_label_day_no_limit);
     }
 }

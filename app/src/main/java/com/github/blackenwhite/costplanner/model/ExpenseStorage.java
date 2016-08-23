@@ -15,21 +15,19 @@ import java.util.List;
 
 public class ExpenseStorage {
     private static final String TAG = "ExpenseStorage";
-    private static ExpenseStorage sInstance;
+    private static ExpenseStorage instance;
 
-    private Context mContext;
-    private SQLiteDatabase mDatabase;
+    private SQLiteDatabase database;
 
     public static ExpenseStorage get(Context context) {
-        if (sInstance == null) {
-            sInstance = new ExpenseStorage(context);
+        if (instance == null) {
+            instance = new ExpenseStorage(context);
         }
-        return sInstance;
+        return instance;
     }
 
     private ExpenseStorage(Context context) {
-        mContext = context;
-        mDatabase = LimitDbHelper.get(context).getWritableDatabase();
+        database = LimitDbHelper.get(context).getWritableDatabase();
     }
 
     public void printExpensesForDailyLimit(String dailyId) {
@@ -63,23 +61,23 @@ public class ExpenseStorage {
 
     public long addExpense(Expense expense) {
         ContentValues values = getContentValues(expense);
-        return mDatabase.insert(LimitDbSchema.ExpenseTable.NAME, null, values);
+        return database.insert(LimitDbSchema.ExpenseTable.NAME, null, values);
     }
 
     public void deleteExpenses(List<Expense> expenses) {
-        mDatabase.beginTransaction();
+        database.beginTransaction();
         for (Expense expense : expenses) {
-            mDatabase.delete(
+            database.delete(
                     LimitDbSchema.ExpenseTable.NAME,
                     LimitDbSchema.ExpenseTable.Cols.ID + " = ?",
                     new String[]{expense.getId()});
         }
-        mDatabase.setTransactionSuccessful();
-        mDatabase.endTransaction();
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     public Integer getSum(String dailyId) {
-        Cursor cursor = mDatabase.rawQuery(
+        Cursor cursor = database.rawQuery(
                 "SELECT SUM(" + LimitDbSchema.ExpenseTable.Cols.EXPENSE_VALUE + ") FROM " +
                         LimitDbSchema.ExpenseTable.NAME + " WHERE " + LimitDbSchema.ExpenseTable.Cols.LIMIT_DAILY_ID + " = ?",
                 new String[]{dailyId});
@@ -95,7 +93,7 @@ public class ExpenseStorage {
     }
 
     private ExpenseCursorWrapper queryExpenses(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(
+        Cursor cursor = database.query(
                 LimitDbSchema.ExpenseTable.NAME,
                 null,
                 whereClause,

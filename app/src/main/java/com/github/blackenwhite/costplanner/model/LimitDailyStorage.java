@@ -17,8 +17,8 @@ public class LimitDailyStorage {
     private static final String TAG = "LimitDailyStorage";
     private static LimitDailyStorage instance;
 
-    private Context mContext;
-    private SQLiteDatabase mDatabase;
+    private Context context;
+    private SQLiteDatabase database;
 
     public static LimitDailyStorage get(Context context) {
         if (instance == null) {
@@ -28,8 +28,8 @@ public class LimitDailyStorage {
     }
 
     private LimitDailyStorage(Context context) {
-        mContext = context;
-        mDatabase = LimitDbHelper.get(context).getWritableDatabase();
+        this.context = context;
+        database = LimitDbHelper.get(context).getWritableDatabase();
     }
 
     public void printAllLimitsDaily() {
@@ -41,7 +41,7 @@ public class LimitDailyStorage {
     }
 
     public void printAllLimitsDaily(String limitMonthlyId) {
-        LimitMonthly limitMonthly = LimitMonthlyStorage.get(mContext).getLimitMonthly(limitMonthlyId);
+        LimitMonthly limitMonthly = LimitMonthlyStorage.get(context).getLimitMonthly(limitMonthlyId);
         Log.d(TAG, "== Printing all daily limits for [" + limitMonthly.getYear() + " " + limitMonthly.getMonthName() + "] ==");
         for (LimitDaily limitDaily : getLimitsDaily(limitMonthlyId)) {
             Log.d(TAG, limitDaily.toString());
@@ -50,33 +50,33 @@ public class LimitDailyStorage {
     }
 
     public void addLimits(List<LimitDaily> limits) {
-        mDatabase.beginTransaction();
+        database.beginTransaction();
         for (LimitDaily limit : limits) {
             ContentValues values = getContentValues(limit);
-            mDatabase.insert(LimitDbSchema.LimitDailyTable.NAME, null, values);
+            database.insert(LimitDbSchema.LimitDailyTable.NAME, null, values);
         }
-        mDatabase.setTransactionSuccessful();
-        mDatabase.endTransaction();
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     public void updateLimits(List<LimitDaily> limits) {
-        mDatabase.beginTransaction();
+        database.beginTransaction();
         for (LimitDaily limit : limits) {
             ContentValues contentValue = getContentValuesLimitValue(limit);
-            mDatabase.update(
+            database.update(
                     LimitDbSchema.LimitDailyTable.NAME,
                     contentValue,
                     LimitDbSchema.LimitDailyTable.Cols.ID + " = ?",
                     new String[]{limit.getId()});
         }
-        mDatabase.setTransactionSuccessful();
-        mDatabase.endTransaction();
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     public void updateLimit(LimitDaily limitDaily) {
         Log.d(TAG, limitDaily.toString());
         ContentValues contentValue = getContentValuesLimitSpent(limitDaily);
-        mDatabase.update(
+        database.update(
                 LimitDbSchema.LimitDailyTable.NAME,
                 contentValue,
                 LimitDbSchema.LimitDailyTable.Cols.ID + " = ?",
@@ -140,7 +140,7 @@ public class LimitDailyStorage {
     }
 
     private LimitDailyCursorWrapper queryLimitsDaily(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(
+        Cursor cursor = database.query(
                 LimitDbSchema.LimitDailyTable.NAME,
                 null,
                 whereClause,

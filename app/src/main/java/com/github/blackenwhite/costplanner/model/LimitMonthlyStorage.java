@@ -19,8 +19,8 @@ public class LimitMonthlyStorage {
     private static final String TAG = LimitMonthlyStorage.class.getSimpleName();
     private static LimitMonthlyStorage instance;
 
-    private Context mContext;
-    private SQLiteDatabase mDatabase;
+    private Context context;
+    private SQLiteDatabase database;
 
     public static LimitMonthlyStorage get(Context context) {
         if (instance == null) {
@@ -30,8 +30,8 @@ public class LimitMonthlyStorage {
     }
 
     private LimitMonthlyStorage(Context context) {
-        mContext = context.getApplicationContext();
-        mDatabase = LimitDbHelper.get(mContext).getWritableDatabase();
+        this.context = context.getApplicationContext();
+        database = LimitDbHelper.get(this.context).getWritableDatabase();
     }
 
     public void dPrintAllLimitsMonthly() {
@@ -47,7 +47,7 @@ public class LimitMonthlyStorage {
             return false;
         }
         ContentValues values = getContentValues(limitMonthly);
-        mDatabase.insert(LimitMonthlyTable.NAME, null, values);
+        database.insert(LimitMonthlyTable.NAME, null, values);
 
         return true;
     }
@@ -57,7 +57,7 @@ public class LimitMonthlyStorage {
             return false;
         }
         ContentValues values = getContentValues(limitMonthly);
-        mDatabase.update(LimitMonthlyTable.NAME, values,
+        database.update(LimitMonthlyTable.NAME, values,
                 LimitMonthlyTable.Cols.ID + " = ?",
                 new String[]{limitMonthly.getId()});
 
@@ -161,7 +161,7 @@ public class LimitMonthlyStorage {
     }
 
     private LimitMonthlyCursorWrapper queryLimitsMonthly(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(
+        Cursor cursor = database.query(
                 LimitMonthlyTable.NAME,
                 null,
                 whereClause,

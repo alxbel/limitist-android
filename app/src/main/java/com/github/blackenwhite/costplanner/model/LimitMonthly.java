@@ -8,35 +8,35 @@ import java.util.List;
 
 public class LimitMonthly {
     private static final String TAG = "LimitMonthly";
-    private String mId;
-    private int mMonth;
-    private int mYear;
-    private int mLimitValue;
-    private int mDays;
+    private String id;
+    private int month;
+    private int year;
+    private int limitValue;
+    private int days;
 
     public LimitMonthly(){}
 
     public LimitMonthly(int year, int month, int limitValue) {
-        mId = String.format("%d%d", year, month);
-        mYear = year;
-        mMonth = month;
-        mLimitValue = limitValue;
-        mDays = DateManager.get().getDaysInMonth(mYear, mMonth);
+        id = String.format("%d%d", year, month);
+        this.year = year;
+        this.month = month;
+        this.limitValue = limitValue;
+        days = DateManager.get().getDaysInMonth(this.year, this.month);
     }
 
     public LimitMonthly(String id, int year, int month, int limitValue) {
-        mId = id;
-        mYear = year;
-        mMonth = month;
-        mLimitValue = limitValue;
-        mDays = DateManager.get().getDaysInMonth(mYear, mMonth);
+        this.id = id;
+        this.year = year;
+        this.month = month;
+        this.limitValue = limitValue;
+        days = DateManager.get().getDaysInMonth(this.year, this.month);
     }
 
     @Override
     public String toString() {
         return String.format(Settings.getLocale(),
                 "[id=%s] %s %d m:%d",
-                mId, DateManager.get().getMonth(mMonth), mYear, mLimitValue);
+                id, DateManager.get().getMonth(month), year, limitValue);
     }
 
     @Override
@@ -46,10 +46,10 @@ public class LimitMonthly {
 
         LimitMonthly limitMonthly = (LimitMonthly) o;
 
-        if (mMonth != limitMonthly.mMonth) return false;
-        if (mYear != limitMonthly.mYear) return false;
-        if (mLimitValue != limitMonthly.mLimitValue) return false;
-        return mId != null ? mId.equals(limitMonthly.mId) : limitMonthly.mId == null;
+        if (month != limitMonthly.month) return false;
+        if (year != limitMonthly.year) return false;
+        if (limitValue != limitMonthly.limitValue) return false;
+        return id != null ? id.equals(limitMonthly.id) : limitMonthly.id == null;
     }
 
     public static String createID(Integer year, Integer month) {
@@ -57,54 +57,54 @@ public class LimitMonthly {
     }
 
     public String getId() {
-        return mId;
+        return id;
     }
 
     public void setId(String id) {
-        mId = id;
+        this.id = id;
     }
 
     public int getLimitValue() {
-        return mLimitValue;
+        return limitValue;
     }
 
     public void setLimitValue(int limitValue) {
-        mLimitValue = limitValue;
+        this.limitValue = limitValue;
     }
 
     public int getMonth() {
-        return mMonth;
+        return month;
     }
 
     public String getMonthName() {
-        return DateManager.get().getMonth(mMonth);
+        return DateManager.get().getMonth(month);
     }
 
     public void setMonth(int month) {
-        mMonth = month;
+        this.month = month;
     }
 
     public int getYear() {
-        return mYear;
+        return year;
     }
 
     public void setYear(int year) {
-        mYear = year;
+        this.year = year;
     }
 
     public int getDays() {
-        return mDays;
+        return days;
     }
 
     public int calculateLimitDailyValue() {
-        return mLimitValue / mDays;
+        return limitValue / days;
     }
 
     public List<LimitDaily> createDailyLimits() {
         List<LimitDaily> limitDailyList = new ArrayList<>();
         int limitValue = calculateLimitDailyValue();
-        for (int day = 1; day <= mDays; day++) {
-            LimitDaily limit = new LimitDaily(mId, limitValue, day);
+        for (int day = 1; day <= days; day++) {
+            LimitDaily limit = new LimitDaily(id, limitValue, day);
             limitDailyList.add(limit);
         }
         return limitDailyList;

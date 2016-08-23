@@ -22,46 +22,46 @@ import java.util.List;
 public class ExpensesDialog extends AlertDialog {
 
     private static final String TAG = "ExpensesDialog";
-    private AlertDialog mDialog;
-    private List<Expense> mExpensesToDelete;
-    private ExpensesActivity mExpensesActivity;
-    private Activity mActivity;
+    private AlertDialog dialog;
+    private List<Expense> expensesToDelete;
+    private ExpensesActivity expensesActivity;
+    private Activity activity;
 
     protected ExpensesDialog(ExpensesActivity expensesActivity, List<Expense> expenses) {
         super(expensesActivity.getActivity());
 
-        mExpensesActivity = expensesActivity;
-        mActivity = expensesActivity.getActivity();
-        mExpensesToDelete = new ArrayList<>();
+        this.expensesActivity = expensesActivity;
+        activity = expensesActivity.getActivity();
+        expensesToDelete = new ArrayList<>();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.dialog_title_expenses);
-        LayoutInflater inflater = mActivity.getLayoutInflater();
+        LayoutInflater inflater = activity.getLayoutInflater();
         LinearLayout expensesView = (LinearLayout) inflater.inflate(R.layout.dialog_expenses, null);
         ListView expenseListView = (ListView) expensesView.findViewById(R.id.dialog_expenses_list);
 
-        ExpenseAdapter expenseAdapter = new ExpenseAdapter(mActivity, expenses);
+        ExpenseAdapter expenseAdapter = new ExpenseAdapter(activity, expenses);
 
         expenseListView.setAdapter(expenseAdapter);
         builder.setView(expensesView);
 
         builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                mExpensesActivity.killEmAll(mExpensesToDelete);
+                ExpensesDialog.this.expensesActivity.killEmAll(expensesToDelete);
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                mExpensesActivity.updateExpenseListForDailyLimit();
+                ExpensesDialog.this.expensesActivity.updateExpenseListForDailyLimit();
             }
         });
 
-        mDialog = builder.create();
+        dialog = builder.create();
     }
 
     @Override
     public void show() {
-        mDialog.show();
+        dialog.show();
     }
 
     class ExpenseAdapter extends ArrayAdapter<Expense> {
@@ -90,7 +90,7 @@ public class ExpensesDialog extends AlertDialog {
                     Expense del = mExpenses.get(position);
                     remove(del);
                     mExpenses.remove(del);
-                    mExpensesToDelete.add(del);
+                    expensesToDelete.add(del);
                 }
             });
 

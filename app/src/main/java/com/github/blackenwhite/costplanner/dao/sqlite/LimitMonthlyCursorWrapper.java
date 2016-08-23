@@ -17,11 +17,6 @@ public class LimitMonthlyCursorWrapper extends CursorWrapper {
         int month = getInt(getColumnIndex(LimitMonthlyTable.Cols.MONTH));
         int limit = getInt(getColumnIndex(LimitMonthlyTable.Cols.LIMIT_VALUE));
 
-//        LimitMonthly limitMonthly = new LimitMonthly();
-//        limitMonthly.setId(id);
-//        limitMonthly.setYear(year);
-//        limitMonthly.setMonth(month);
-//        limitMonthly.setLimitValue(limit);
         LimitMonthly limitMonthly = new LimitMonthly(id, year, month, limit);
 
         return limitMonthly;

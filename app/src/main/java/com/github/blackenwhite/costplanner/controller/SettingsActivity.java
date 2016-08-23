@@ -12,7 +12,7 @@ import com.github.blackenwhite.costplanner.dao.file.Settings;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private FloatingActionButton mButtonSave;
+    private FloatingActionButton buttonSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +25,8 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mButtonSave = (FloatingActionButton) findViewById(R.id.button_save);
-        mButtonSave.setOnClickListener(new View.OnClickListener() {
+        buttonSave = (FloatingActionButton) findViewById(R.id.button_save);
+        buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(RESULT_OK);

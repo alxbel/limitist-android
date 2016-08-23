@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DateManager {
-    private static DateManager sDateManager;
+    private static DateManager dateManager;
 
     private static final String TAG = "DateManager";
 
@@ -26,87 +26,86 @@ public class DateManager {
     private static final String MONTH_FORMAT = "MMMM";
     private static final String DATE_FORMAT = "E dd.MM.yyyy";
 
-    private BiMap<Integer, String> mMonthColl;
-    private DateTimeFormatter mDateFormatter;
-    private LocalDate mLocalDate;
-    private Locale mLocale;
-
-    private Context mContext;
+    private Context context;
+    private BiMap<Integer, String> monthColl;
+    private DateTimeFormatter dateFormatter;
+    private LocalDate localDate;
+    private Locale locale;
 
     private DateManager(Context context) {
-        mContext = context;
-        mLocalDate = new LocalDate();
-        mMonthColl = new BiMap<>();
-        mDateFormatter = DateTimeFormat.forPattern(DATE_FORMAT);
-        setLocale(Settings.getLangPref(mContext));
+        this.context = context;
+        localDate = new LocalDate();
+        monthColl = new BiMap<>();
+        dateFormatter = DateTimeFormat.forPattern(DATE_FORMAT);
+        setLocale(Settings.getLangPref(this.context));
     }
 
     public static DateManager get() {
-        return sDateManager;
+        return dateManager;
     }
 
     public static void init(Context context) {
-        if (sDateManager == null) {
-            sDateManager = new DateManager(context);
+        if (dateManager == null) {
+            dateManager = new DateManager(context);
         }
     }
 
     public String getDate() {
-        return mDateFormatter.withLocale(mLocale).print(mLocalDate);
+        return dateFormatter.withLocale(locale).print(localDate);
     }
 
     public LocalDate getLocalDate() {
-        return mLocalDate;
+        return localDate;
     }
 
     public void setLocalDate(LocalDate localDate) {
-        mLocalDate = localDate;
+        this.localDate = localDate;
     }
 
     public Locale getLocale() {
-        return mLocale;
+        return locale;
     }
 
 //    public void setLocale(Locale locale) {
-//        mLocale = locale;
+//        locale = locale;
 //    }
 
     public void setLocale(String locale) {
-        if (mLocale != null && mLocale.equals(locale)) {
+        if (this.locale != null && this.locale.equals(locale)) {
             return;
         }
-        mLocale = new Locale(locale);
+        this.locale = new Locale(locale);
         initMonths();
     }
 
     public Integer getCurrentYear() {
-        if (mLocalDate == null) {
-            mLocalDate = new LocalDate();
+        if (localDate == null) {
+            localDate = new LocalDate();
         }
-        return mLocalDate.getYear();
+        return localDate.getYear();
     }
 
     public Integer getCurrentMonthIndex() {
-        if (mLocalDate == null) {
-            mLocalDate = new LocalDate();
+        if (localDate == null) {
+            localDate = new LocalDate();
         }
-        return mLocalDate.getMonthOfYear();
+        return localDate.getMonthOfYear();
     }
 
     public Integer getCurrentDayOfMonth() {
-        if (mLocalDate == null) {
-            mLocalDate = new LocalDate();
+        if (localDate == null) {
+            localDate = new LocalDate();
         }
-        return mLocalDate.getDayOfMonth();
+        return localDate.getDayOfMonth();
     }
 
     public String getCurrentMonth() {
-        return getMonth(mLocalDate.getMonthOfYear());
+        return getMonth(localDate.getMonthOfYear());
     }
 
     public Integer getMonthIndex(String month) {
         try {
-            return mMonthColl.getKey(month);
+            return monthColl.getKey(month);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return DEFAULT_MONTH_INDEX;
@@ -115,7 +114,7 @@ public class DateManager {
 
     public String getMonth(int index) {
         try {
-            return mMonthColl.getValue(index);
+            return monthColl.getValue(index);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return ERROR_MONTH_NAME;
@@ -127,18 +126,18 @@ public class DateManager {
     }
 
     public String[] getMonthNames() {
-        return mMonthColl.getValues().toArray(new String[mMonthColl.size()]);
+        return monthColl.getValues().toArray(new String[monthColl.size()]);
     }
 
     public String[] getRemainsMonthNames() {
-        final List<String> all = mMonthColl.getValues();
+        final List<String> all = monthColl.getValues();
         final int cur = getCurrentMonthIndex() - 1;
-        String[] remains = Arrays.copyOfRange(all.toArray(new String[mMonthColl.size()]), cur, mMonthColl.size());
+        String[] remains = Arrays.copyOfRange(all.toArray(new String[monthColl.size()]), cur, monthColl.size());
         return remains;
     }
 
     private void initMonths() {
-        mMonthColl.clear();
-        mMonthColl.putAll(Factory.getIntegers(1,12), mContext.getResources().getStringArray(R.array.month_array));
+        monthColl.clear();
+        monthColl.putAll(Factory.getIntegers(1,12), context.getResources().getStringArray(R.array.month_array));
     }
 }

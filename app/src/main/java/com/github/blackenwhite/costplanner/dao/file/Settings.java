@@ -9,10 +9,10 @@ import java.util.Locale;
 
 public class Settings {
 
-    private static Context sContext;
+    private static Context context;
 
     public static void init(Context context) {
-        sContext = context;
+        Settings.context = context;
     }
 
     public static String getLangPref(Context ctx) {
@@ -32,6 +32,6 @@ public class Settings {
     }
 
     public static Locale getLocale() {
-        return sContext.getResources().getConfiguration().locale;
+        return context.getResources().getConfiguration().locale;
     }
 }

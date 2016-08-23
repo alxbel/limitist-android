@@ -1,67 +1,67 @@
 package com.github.blackenwhite.costplanner.model;
 
 public class LimitDaily {
-    private String mId;
-    private String mLimitMonthlyId;
-    private int mDay;
-    private int mLimitValue;
-    private int mSpent;
+    private String id;
+    private String limitMonthlyId;
+    private int day;
+    private int limitValue;
+    private int spent;
 
     public LimitDaily(String limitMonthlyId, int limitValue, int day) {
-        mLimitMonthlyId = limitMonthlyId;
-        mLimitValue = limitValue;
-        mDay = day;
-        mId = String.format("%s%d", mLimitMonthlyId, mDay);
+        this.limitMonthlyId = limitMonthlyId;
+        this.limitValue = limitValue;
+        this.day = day;
+        id = String.format("%s%d", this.limitMonthlyId, this.day);
     }
 
     public LimitDaily(String Id, String limitMonthlyId, int day, int limitValue) {
-        mId = Id;
-        mLimitMonthlyId = limitMonthlyId;
-        mDay = day;
-        mLimitValue = limitValue;
+        id = Id;
+        this.limitMonthlyId = limitMonthlyId;
+        this.day = day;
+        this.limitValue = limitValue;
     }
 
     @Override
     public String toString() {
         return "LimitDaily{" +
-                "mId='" + mId + '\'' +
-                ", mLimitMonthlyId='" + mLimitMonthlyId + '\'' +
-                ", mLimitValue=" + mLimitValue +
-                ", mDay=" + mDay +
-                ", mSpent=" + mSpent +
+                "id='" + id + '\'' +
+                ", limitMonthlyId='" + limitMonthlyId + '\'' +
+                ", limitValue=" + limitValue +
+                ", day=" + day +
+                ", spent=" + spent +
                 '}';
     }
 
     public int getDay() {
-        return mDay;
+        return day;
     }
 
     public String getId() {
-        return mId;
+        return id;
     }
 
     public String getLimitMonthlyId() {
-        return mLimitMonthlyId;
+        return limitMonthlyId;
     }
 
     public int getLimitValue() {
-        return mLimitValue;
+        return limitValue;
     }
 
     public void setLimitValue(int limitValue) {
-        mLimitValue = limitValue;
+        this.limitValue = limitValue;
     }
 
     public void setDay(int day) {
-        mDay = day;
+        this.day = day;
     }
 
     public void setId(String id) {
-        mId = id;
+        this.id = id;
     }
 
     public void setLimitMonthlyId(String limitMonthlyId) {
-        mLimitMonthlyId = limitMonthlyId;
+        this.limitMonthlyId = limitMonthlyId;
     }
 
     public int getBalance() {
@@ -69,11 +69,11 @@ public class LimitDaily {
     }
 
     public int getSpent() {
-        return mSpent;
+        return spent;
     }
 
     public void setSpent(int spent) {
-        mSpent = spent;
+        this.spent = spent;
     }
 
     public static String generateIdForCurrentDate() {

@@ -3,70 +3,70 @@ package com.github.blackenwhite.costplanner.model;
 import java.util.UUID;
 
 public class Expense {
-    private String mId;
-    private String mLimitDailyId;
-    private String mTitle;
-    private String mCategory;
-    private int mValue;
+    private String id;
+    private String limitDailyId;
+    private String title;
+    private String category;
+    private int value;
 
     public Expense() {
-        mId = UUID.randomUUID().toString();
-        mCategory = "";
-        mTitle = "";
+        id = UUID.randomUUID().toString();
+        category = "";
+        title = "";
     }
 
     public Expense(String id, String limitDailyId, String title, String category, int value) {
-        mId = id;
-        mLimitDailyId = limitDailyId;
-        mTitle = title;
-        mCategory = category;
-        mValue = value;
+        this.id = id;
+        this.limitDailyId = limitDailyId;
+        this.title = title;
+        this.category = category;
+        this.value = value;
     }
 
     @Override
     public String toString() {
         return "Expense{" +
-                "mId='" + mId + '\'' +
-                ", mLimitDailyId='" + mLimitDailyId + '\'' +
-                ", mTitle='" + mTitle + '\'' +
-                ", mCategory='" + mCategory + '\'' +
-                ", mValue=" + mValue +
+                "id='" + id + '\'' +
+                ", limitDailyId='" + limitDailyId + '\'' +
+                ", title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", value=" + value +
                 '}';
     }
 
     public String getId() {
-        return mId;
+        return id;
     }
 
     public String getCategory() {
-        return mCategory;
+        return category;
     }
 
     public void setCategory(String category) {
-        mCategory = category;
+        this.category = category;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String title) {
-        mTitle = title;
+        this.title = title;
     }
 
     public int getValue() {
-        return mValue;
+        return value;
     }
 
     public void setValue(int value) {
-        mValue = value;
+        this.value = value;
     }
 
     public String getLimitDailyId() {
-        return mLimitDailyId;
+        return limitDailyId;
     }
 
     public void setLimitDailyId(String limitDailyId) {
-        mLimitDailyId = limitDailyId;
+        this.limitDailyId = limitDailyId;
     }
 }
