@@ -13,6 +13,9 @@ public class LimitMonthly {
     private int year;
     private int limitValue;
     private int days;
+    private int spent;
+
+
 
     public LimitMonthly(){}
 
@@ -94,6 +97,18 @@ public class LimitMonthly {
 
     public int getDays() {
         return days;
+    }
+
+    public int getSpent() {
+        return spent;
+    }
+
+    public int getBalance() {
+        return getLimitValue() - getSpent();
+    }
+
+    public void setSpent(int spent) {
+        this.spent = spent;
     }
 
     public int calculateLimitDailyValue() {

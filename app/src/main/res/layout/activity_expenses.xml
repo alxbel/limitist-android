@@ -56,17 +56,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true">
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="horizontal">-->
-
                     <TableRow>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L "
+                            android:text="Lm "
                             android:textColor="@color/colorGrey"
                             android:textSize="@dimen/monthly_limit_calculation_text_size"/>
 
@@ -79,8 +74,49 @@
                             android:textStyle="italic"
                             android:typeface="sans"/>
 
+                        <LinearLayout
+                            android:id="@+id/main_limit_monthly_calculations_spent_balance"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorGrey"
+                                android:textSize="@dimen/monthly_limit_calculation_text_size"
+                                android:textStyle="italic"
+                                android:typeface="sans"
+                                android:text=" - "/>
+
+                            <TextView
+                                android:id="@+id/text_main_month_limit_spent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorGrey"
+                                android:textSize="@dimen/monthly_limit_calculation_text_size"
+                                android:textStyle="italic"
+                                android:typeface="sans"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorGrey"
+                                android:textSize="@dimen/monthly_limit_calculation_text_size"
+                                android:textStyle="italic"
+                                android:typeface="sans"
+                                android:text=" = "/>
+
+                            <TextView
+                                android:id="@+id/text_main_month_limit_balance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorGrey"
+                                android:textSize="@dimen/monthly_limit_calculation_text_size"
+                                android:textStyle="italic"
+                                android:typeface="sans"/>
+                        </LinearLayout>
+
                     </TableRow>
-                    <!--</LinearLayout>-->
 
 
                 </TableLayout>
@@ -108,7 +144,7 @@
                 android:layout_marginRight="5dp"
                 android:contentDescription="underline"
                 android:layerType="software"
-                android:src="@drawable/dotted"/>
+                android:src="@drawable/dotted_pink"/>
             <!-- SEPARATOR ********************************************************************* -->
 
             <!--Daily limit-->
@@ -129,16 +165,35 @@
                     android:textStyle="bold"
                     android:typeface="monospace"/>
 
-                <TextView
-                    android:id="@+id/text_main_date"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:textStyle="normal"/>
+                    android:layout_centerHorizontal="true">
+
+                    <TextView
+                        android:id="@+id/text_main_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@color/colorGreyLighter"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp"/>
+                    <!--<ImageView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginLeft="5dp"-->
+                        <!--android:layout_marginRight="5dp"-->
+                        <!--android:contentDescription="underline"-->
+                        <!--android:layerType="software"-->
+                        <!--android:src="@drawable/dotted_blue"/>-->
+
+                </LinearLayout>
+
+
 
                 <!--[START] Daily limit calculations-->
                 <TableLayout
@@ -154,7 +209,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="L "
+                            android:text="Ld "
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/daily_limit_calculation_text_size"/>
 

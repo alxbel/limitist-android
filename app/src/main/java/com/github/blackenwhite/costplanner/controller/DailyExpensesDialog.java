@@ -52,7 +52,7 @@ public class DailyExpensesDialog extends AlertDialog {
         });
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                dismiss();
+                cancel();
             }
         });
 

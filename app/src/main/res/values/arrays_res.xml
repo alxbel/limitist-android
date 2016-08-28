@@ -18,7 +18,10 @@
     <string-array name="array_categories">
         <item>Продукты</item>
         <item>Услуги</item>
-        <item>Комм. платежи</item>
+        <item>Транспорт</item>
+        <item>Развлечения</item>
+        <item>Одежда</item>
+        <item>Кафе</item>
         <item>Другое</item>
     </string-array>
 </resources>

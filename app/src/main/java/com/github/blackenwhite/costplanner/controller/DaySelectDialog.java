@@ -1,8 +1,10 @@
 package com.github.blackenwhite.costplanner.controller;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -17,7 +19,7 @@ public class DaySelectDialog extends AlertDialog {
     private static final int WEEKS = 4;
     private AlertDialog dialog;
 
-    protected DaySelectDialog(final ExpensesActivity expensesActivity) {
+    protected DaySelectDialog(final ExpensesActivity expensesActivity, final int daySelected) {
         super(expensesActivity.getActivity());
         Activity activity = expensesActivity.getActivity();
 
@@ -44,6 +46,16 @@ public class DaySelectDialog extends AlertDialog {
                 final TextView dayView = new TextView(activity);
                 dayView.setText(String.valueOf(i+1));
                 dayView.setTextSize(20);
+                if (i == daySelected-1) {
+                    dayView.setBackgroundColor(Color.parseColor("#b9b7b7"));
+                }
+                dayView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        dayView.setBackgroundColor(Color.parseColor("#b9b7b7"));
+                        return false;
+                    }
+                });
                 dayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -51,6 +63,8 @@ public class DaySelectDialog extends AlertDialog {
                         dialog.dismiss();
                     }
                 });
+
+                dayView.setPadding(30, 0, 0, 0);
                 row.addView(dayView, new TableRow.LayoutParams(120, 100));
                 i++;
             }

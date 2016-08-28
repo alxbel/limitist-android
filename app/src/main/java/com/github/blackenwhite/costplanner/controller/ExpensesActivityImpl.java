@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +58,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
     private LinearLayout layout;
     private TextView dateText;
-    private int dayToday;
+    private int daySelected;
 
     private LimitDaily limitDaily;
     private List<Expense> expenses;
@@ -81,6 +82,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     private TextView noMonthlyLimitLabel;
 
     private FloatingActionButton buttonAddExpense;
+    private LinearLayout limMonthCalcSpentBal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +107,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
         buttonAddExpense = (FloatingActionButton) findViewById(R.id.main_button_add_expense);
         buttonAddExpense.setOnClickListener(this);
 
-        dayToday = DateManager.get().getCurrentDayOfMonth();
+        int dayToday = DateManager.get().getCurrentDayOfMonth();
 
         setDailyLimitView();
         setDailyLimitForDay(dayToday);
@@ -175,7 +177,7 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
                 getAddExpenseDialog().show();
                 break;
             case R.id.icon_info_spent:
-                new DailyExpensesDialog(this, expenses).show();
+//                new DailyExpensesDialog(this, expenses).show();
                 break;
             case R.id.text_main_date:
                 openDaySelectDialog();
@@ -187,6 +189,9 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (v.getId() == R.id.layout_main_limit_daily_spent) {
+            new DailyExpensesDialog(this, expenses).show();
+        }
         Helper.hideKeyboard(this);
         return false;
     }
@@ -246,16 +251,17 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     }
 
     private void updateView() {
+        // Define daily limit if not yet
         if (limitDaily == null) {
             setDailyLimitForDay(DateManager.get().getCurrentDayOfMonth());
         }
-
+        // If limit exists, set its calculations view
         if (limitDaily != null) {
             noDailyLimitLabel.setVisibility(View.GONE);
             limitDailyCalculationsLayout.setVisibility(View.VISIBLE);
             limitDailyText.setText(String.format(FORMAT_DATA, limitDaily.getLimitValue()));
 
-            Integer spentSum = ExpenseStorage.get(this).getSum(limitDaily.getId());
+            Integer spentSum = ExpenseStorage.get(this).getDailySum(limitDaily.getId());
             if (spentSum != null && !spentSum.equals(0)) {
                 limitDaily.setSpent(spentSum);
                 limitDailySpentLayout.setVisibility(View.VISIBLE);
@@ -276,18 +282,32 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
                 limitDailyBalanceNegativeLayout.setVisibility(View.GONE);
             }
         } else {
+            // If not, set empty label
             noDailyLimitLabel.setVisibility(View.VISIBLE);
             limitDailyCalculationsLayout.setVisibility(View.GONE);
         }
 
+        // Define monthly limit if not yet
         if (limitMonthly == null) {
             limitMonthly = LimitMonthlyStorage.get(this).getLimitMonthly(LimitMonthly.generateIdForCurrentDate());
         }
+        // If limit exists, set its calculations view
         if (limitMonthly != null) {
+            limitMonthly.setSpent(ExpenseStorage.get(this).getMonthlySpent(limitMonthly.getId()));
             noMonthlyLimitLabel.setVisibility(View.GONE);
             limitMonthlyCalculationsLayout.setVisibility(View.VISIBLE);
             limitMonthlyText.setText(String.format(FORMAT_DATA, limitMonthly.getLimitValue()));
+
+            limMonthCalcSpentBal.setVisibility(View.GONE);
+            if (limitMonthly.getSpent() > 0) {
+                limMonthCalcSpentBal.setVisibility(View.VISIBLE);
+                TextView txtMonthSpent = (TextView) findViewById(R.id.text_main_month_limit_spent);
+                TextView txtMonthBalance = (TextView) findViewById(R.id.text_main_month_limit_balance);
+                txtMonthSpent.setText(String.valueOf(limitMonthly.getSpent()));
+                txtMonthBalance.setText(String.valueOf(limitMonthly.getBalance()));
+            }
         } else {
+            // If not, set empty label
             noMonthlyLimitLabel.setVisibility(View.VISIBLE);
             limitMonthlyCalculationsLayout.setVisibility(View.GONE);
         }
@@ -367,12 +387,13 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
         // Monthly limit calculations area
         limitMonthlyCalculationsLayout = (TableLayout) findViewById(R.id.main_limit_monthly_calculations);
+        limMonthCalcSpentBal = (LinearLayout) findViewById(R.id.main_limit_monthly_calculations_spent_balance);
         limitMonthlyText = (TextView) findViewById(R.id.text_main_month_limit);
         noMonthlyLimitLabel = (TextView) findViewById(R.id.main_label_month_no_limit);
     }
 
     private void openDaySelectDialog() {
-        new DaySelectDialog(this).show();
+        new DaySelectDialog(this, daySelected).show();
     }
 
     private void setDailyLimitView() {
@@ -383,9 +404,10 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
         // Daily limit calculations area
         limitDailyCalculationsLayout = (TableLayout) findViewById(R.id.main_limit_daily_calculations);
         limitDailySpentLayout = (TableRow) findViewById(R.id.layout_main_limit_daily_spent);
+        limitDailySpentLayout.setOnTouchListener(this);
 
         iconInfoLimitSpent = (ImageView) findViewById(R.id.icon_info_spent);
-        iconInfoLimitSpent.setOnClickListener(this);
+//        iconInfoLimitSpent.setOnClickListener(this);
 
         limitDailyText = (TextView) findViewById(R.id.text_main_day_limit);
         limitDailySpentText = (TextView) findViewById(R.id.text_main_daily_spent);
@@ -400,12 +422,15 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
 
     private void setDailyLimitForDay(int day) {
         // Current date (ddd dd.mm.yyyy) center label
+        daySelected = day;
         dateText.setText(DateManager.get().getDateString(day));
 
         limitDaily = LimitDailyStorage.get(this).getLimitDaily(LimitDaily.generateIdForDay(day));
         if (expenses == null) {
             expenses = new LinkedList<>();
         }
-        expenses = ExpenseStorage.get(this).getExpenses(limitDaily.getId());
+        if (limitDaily != null) {
+            expenses = ExpenseStorage.get(this).getExpenses(limitDaily.getId());
+        }
     }
 }

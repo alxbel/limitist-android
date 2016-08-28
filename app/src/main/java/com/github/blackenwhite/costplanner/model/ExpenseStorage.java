@@ -9,6 +9,9 @@ import android.util.Log;
 import com.github.blackenwhite.costplanner.dao.sqlite.ExpenseCursorWrapper;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbHelper;
 import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.ExpenseTable;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitDailyTable;
+import com.github.blackenwhite.costplanner.dao.sqlite.LimitDbSchema.LimitMonthlyTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,7 @@ public class ExpenseStorage {
         List<Expense> expenses = new ArrayList<>();
 
         ExpenseCursorWrapper cursor = queryExpenses(
-                LimitDbSchema.ExpenseTable.Cols.LIMIT_DAILY_ID + " = ?",
+                ExpenseTable.Cols.LIMIT_DAILY_ID + " = ?",
                 new String[]{dailyId}
         );
 
@@ -61,26 +64,57 @@ public class ExpenseStorage {
 
     public long addExpense(Expense expense) {
         ContentValues values = getContentValues(expense);
-        return database.insert(LimitDbSchema.ExpenseTable.NAME, null, values);
+        return database.insert(ExpenseTable.NAME, null, values);
     }
 
     public void deleteExpenses(List<Expense> expenses) {
         database.beginTransaction();
         for (Expense expense : expenses) {
             database.delete(
-                    LimitDbSchema.ExpenseTable.NAME,
-                    LimitDbSchema.ExpenseTable.Cols.ID + " = ?",
+                    ExpenseTable.NAME,
+                    ExpenseTable.Cols.ID + " = ?",
                     new String[]{expense.getId()});
         }
         database.setTransactionSuccessful();
         database.endTransaction();
     }
 
-    public Integer getSum(String dailyId) {
+    public Integer getDailySum(String dailyId) {
         Cursor cursor = database.rawQuery(
-                "SELECT SUM(" + LimitDbSchema.ExpenseTable.Cols.EXPENSE_VALUE + ") FROM " +
-                        LimitDbSchema.ExpenseTable.NAME + " WHERE " + LimitDbSchema.ExpenseTable.Cols.LIMIT_DAILY_ID + " = ?",
+                "SELECT SUM(" + ExpenseTable.Cols.EXPENSE_VALUE + ") FROM " +
+                        ExpenseTable.NAME + " WHERE " + ExpenseTable.Cols.LIMIT_DAILY_ID + " = ?",
                 new String[]{dailyId});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public Integer getMonthlySpent(String monthlyId) {
+        Cursor cursor = database.rawQuery(
+                String.format("SELECT SUM(%s.%s) " +
+                        "FROM %s " +
+                        "JOIN %s " +
+                        "ON %s.%s = %s.%s " +
+                        "JOIN %s " +
+                        "ON %s.%s = %s.%s " +
+                        "WHERE %s.%s = ?",
+                        ExpenseTable.NAME, ExpenseTable.Cols.EXPENSE_VALUE,
+                        ExpenseTable.NAME,
+                        LimitDailyTable.NAME,
+                        LimitDailyTable.NAME, LimitDailyTable.Cols.ID,
+                        ExpenseTable.NAME, ExpenseTable.Cols.LIMIT_DAILY_ID,
+                        LimitMonthlyTable.NAME,
+                        LimitMonthlyTable.NAME, LimitMonthlyTable.Cols.ID,
+                        LimitDailyTable.NAME, LimitDailyTable.Cols.LIMIT_MONTHLY_ID,
+                        LimitMonthlyTable.NAME, LimitMonthlyTable.Cols.ID),
+                new String[]{monthlyId});
+
         try {
             if (cursor.getCount() == 0) {
                 return null;
@@ -94,7 +128,7 @@ public class ExpenseStorage {
 
     private ExpenseCursorWrapper queryExpenses(String whereClause, String[] whereArgs) {
         Cursor cursor = database.query(
-                LimitDbSchema.ExpenseTable.NAME,
+                ExpenseTable.NAME,
                 null,
                 whereClause,
                 whereArgs,
@@ -107,11 +141,11 @@ public class ExpenseStorage {
 
     private ContentValues getContentValues(Expense expense) {
         ContentValues values = new ContentValues();
-        values.put(LimitDbSchema.ExpenseTable.Cols.ID, expense.getId());
-        values.put(LimitDbSchema.ExpenseTable.Cols.LIMIT_DAILY_ID, expense.getLimitDailyId());
-        values.put(LimitDbSchema.ExpenseTable.Cols.EXPENSE_TITLE, expense.getTitle());
-        values.put(LimitDbSchema.ExpenseTable.Cols.EXPENSE_CATEGORY, expense.getCategory());
-        values.put(LimitDbSchema.ExpenseTable.Cols.EXPENSE_VALUE, expense.getValue());
+        values.put(ExpenseTable.Cols.ID, expense.getId());
+        values.put(ExpenseTable.Cols.LIMIT_DAILY_ID, expense.getLimitDailyId());
+        values.put(ExpenseTable.Cols.EXPENSE_TITLE, expense.getTitle());
+        values.put(ExpenseTable.Cols.EXPENSE_CATEGORY, expense.getCategory());
+        values.put(ExpenseTable.Cols.EXPENSE_VALUE, expense.getValue());
         return values;
     }
 }
