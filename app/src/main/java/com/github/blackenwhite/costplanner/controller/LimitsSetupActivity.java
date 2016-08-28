@@ -18,8 +18,8 @@ import com.github.blackenwhite.costplanner.model.LimitMonthly;
 import com.github.blackenwhite.costplanner.model.LimitMonthlyStorage;
 import com.github.blackenwhite.costplanner.util.ResourceManager;
 
-public class LimitsActivity extends AppCompatActivity {
-    private static final String TAG = "LimitsActivity";
+public class LimitsSetupActivity extends AppCompatActivity {
+    private static final String TAG = "LimitsSetupActivity";
 
     private LimitMonthlyStorage limitMonthlyStorage;
     private LimitDailyStorage limitDailyStorage;
@@ -54,7 +54,7 @@ public class LimitsActivity extends AppCompatActivity {
     }
 
     public AlertDialog getInputLimitDialog(final String month, final LimitMonthly limitMonthly) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LimitsActivity.this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LimitsSetupActivity.this);
         alertDialog.setTitle(month);
 
         LayoutInflater inflater = getLayoutInflater();

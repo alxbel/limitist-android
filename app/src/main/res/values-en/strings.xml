@@ -49,4 +49,5 @@
     <string name="dialog_add_expense_label_title">Title</string>
     <string name="dialog_add_expense_label_category">Category</string>
     <string name="dialog_add_expense_btn_details_label">Details</string>
+    <string name="dialog_day_select_title">Select day</string>
 </resources>

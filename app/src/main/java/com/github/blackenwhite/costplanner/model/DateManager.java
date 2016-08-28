@@ -50,8 +50,13 @@ public class DateManager {
         }
     }
 
-    public String getDate() {
+    public String getDateString() {
         return dateFormatter.withLocale(locale).print(localDate);
+    }
+
+    public String getDateString(int day) {
+        LocalDate date = localDate.withDayOfMonth(day);
+        return dateFormatter.withLocale(locale).print(date);
     }
 
     public LocalDate getLocalDate() {
@@ -123,6 +128,10 @@ public class DateManager {
 
     public int getDaysInMonth(int year, int month) {
         return new DateTime(year, month, 14, 12, 0, 0, 000).dayOfMonth().getMaximumValue();
+    }
+
+    public int getDaysInCurrentMonth() {
+        return localDate.dayOfMonth().getMaximumValue();
     }
 
     public String[] getMonthNames() {

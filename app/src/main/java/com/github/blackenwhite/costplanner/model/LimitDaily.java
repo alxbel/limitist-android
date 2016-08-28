@@ -83,4 +83,12 @@ public class LimitDaily {
                 DateManager.get().getCurrentDayOfMonth());
         return id;
     }
+
+    public static String generateIdForDay(int day) {
+        String id = String.format("%s%s%s",
+                DateManager.get().getCurrentYear(),
+                DateManager.get().getCurrentMonthIndex(),
+                day);
+        return id;
+    }
 }

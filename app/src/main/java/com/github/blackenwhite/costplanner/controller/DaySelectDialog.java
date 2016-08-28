@@ -1,0 +1,69 @@
+package com.github.blackenwhite.costplanner.controller;
+
+import android.app.Activity;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import com.github.blackenwhite.costplanner.R;
+
+public class DaySelectDialog extends AlertDialog {
+
+    private static final String TAG = "DaySelectDialog";
+    private static final int WEEKS = 4;
+    private AlertDialog dialog;
+
+    protected DaySelectDialog(final ExpensesActivity expensesActivity) {
+        super(expensesActivity.getActivity());
+        Activity activity = expensesActivity.getActivity();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(R.string.dialog_day_select_title);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        LinearLayout daySelectLayout = (LinearLayout) inflater.inflate(R.layout.dialog_day_select, null);
+        TableLayout daySelectTable = (TableLayout) daySelectLayout.findViewById(R.id.table_day_select);
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.WRAP_CONTENT,
+                TableLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(50,20,20,20);
+        daySelectTable.setLayoutParams(params);
+
+        final int days = expensesActivity.getDays();
+        for (int i = 0; i < days; ) {
+            TableRow row = new TableRow(activity);
+
+            for (int k = 0; k < days / WEEKS; k++) {
+                if (i == days) {
+                    break;
+                }
+                final TextView dayView = new TextView(activity);
+                dayView.setText(String.valueOf(i+1));
+                dayView.setTextSize(20);
+                dayView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        expensesActivity.setViewForDay(Integer.valueOf(dayView.getText().toString()));
+                        dialog.dismiss();
+                    }
+                });
+                row.addView(dayView, new TableRow.LayoutParams(120, 100));
+                i++;
+            }
+            daySelectTable.addView(row);
+        }
+
+        builder.setView(daySelectLayout);
+
+        dialog = builder.create();
+    }
+
+    @Override
+    public void show() {
+        dialog.show();
+    }
+}

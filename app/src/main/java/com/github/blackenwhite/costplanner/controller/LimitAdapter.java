@@ -13,11 +13,11 @@ import com.github.blackenwhite.costplanner.model.LimitMonthly;
 import com.github.blackenwhite.costplanner.model.LimitMonthlyStorage;
 
 public class LimitAdapter extends ArrayAdapter<String> {
-    private final LimitsActivity context;
+    private final LimitsSetupActivity context;
     private final String[] remainMonths;
     private final String CURRENT_YEAR;
 
-    public LimitAdapter(LimitsActivity context, String[] remainMonths) {
+    public LimitAdapter(LimitsSetupActivity context, String[] remainMonths) {
         super(context, -1, remainMonths);
         this.context = context;
         this.remainMonths = remainMonths;

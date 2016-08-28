@@ -184,14 +184,11 @@
                             android:textColor="@color/colorAccent"
                             android:textSize="@dimen/daily_limit_calculation_text_size"/>
 
-                        <com.github.blackenwhite.costplanner.common.CustomEditText
+                        <TextView
                             android:id="@+id/text_main_daily_spent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
-                            android:cursorVisible="true"
-                            android:inputType="numberDecimal"
-                            android:longClickable="false"
                             android:textColor="@color/colorAccent"
                             android:textSize="@dimen/daily_limit_calculation_text_size"
                             android:textStyle="italic"

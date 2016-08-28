@@ -22,7 +22,7 @@
             android:parentActivityName=".controller.ExpensesActivityImpl">
         </activity>
         <activity
-            android:name=".controller.LimitsActivity"
+            android:name=".controller.LimitsSetupActivity"
             android:parentActivityName=".controller.ExpensesActivityImpl">
         </activity>
         <activity

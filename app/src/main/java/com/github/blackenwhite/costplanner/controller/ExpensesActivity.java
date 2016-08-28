@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ExpensesActivity {
     void killEmAll(List<Expense> expenses);
-    void updateExpenseListForDailyLimit();
+    void setViewForDay(int day);
+
     Activity getActivity();
+    int getDays();
 }
