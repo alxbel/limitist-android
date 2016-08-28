@@ -3,6 +3,7 @@ package com.github.blackenwhite.costplanner.controller;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,10 +19,12 @@ public class DaySelectDialog extends AlertDialog {
     private static final String TAG = "DaySelectDialog";
     private static final int WEEKS = 4;
     private AlertDialog dialog;
+    final float screenDensity;
 
     protected DaySelectDialog(final ExpensesActivity expensesActivity, final int daySelected) {
         super(expensesActivity.getActivity());
         Activity activity = expensesActivity.getActivity();
+        screenDensity = activity.getResources().getDisplayMetrics().density;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.dialog_day_select_title);
@@ -32,7 +35,7 @@ public class DaySelectDialog extends AlertDialog {
                 TableLayout.LayoutParams.WRAP_CONTENT,
                 TableLayout.LayoutParams.WRAP_CONTENT
         );
-        params.setMargins(50,20,20,20);
+        params.setMargins(dpToPixels(10), dpToPixels(10), dpToPixels(10), dpToPixels(10));
         daySelectTable.setLayoutParams(params);
 
         final int days = expensesActivity.getDays();
@@ -44,8 +47,10 @@ public class DaySelectDialog extends AlertDialog {
                     break;
                 }
                 final TextView dayView = new TextView(activity);
+                dayView.setPadding(dpToPixels(5), dpToPixels(5), 0, 0);
                 dayView.setText(String.valueOf(i+1));
-                dayView.setTextSize(20);
+                dayView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+//                dayView.setTextSize(dpToPixels(7));
                 if (i == daySelected-1) {
                     dayView.setBackgroundColor(Color.parseColor("#b9b7b7"));
                 }
@@ -64,8 +69,7 @@ public class DaySelectDialog extends AlertDialog {
                     }
                 });
 
-                dayView.setPadding(30, 0, 0, 0);
-                row.addView(dayView, new TableRow.LayoutParams(120, 100));
+                row.addView(dayView, new TableRow.LayoutParams(dpToPixels(40), dpToPixels(40)));
                 i++;
             }
             daySelectTable.addView(row);
@@ -79,5 +83,9 @@ public class DaySelectDialog extends AlertDialog {
     @Override
     public void show() {
         dialog.show();
+    }
+
+    private int dpToPixels(int dp) {
+        return (int) (dp * screenDensity + 0.5f);
     }
 }

@@ -45,9 +45,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesActivity,
-        View.OnClickListener, View.OnTouchListener
-//        View.OnLongClickListener
-{
+        View.OnClickListener, View.OnTouchListener {
     private static final String TAG = "ExpensesActivityImpl";
     private static final int REQUEST_CODE_SETTINGS = 10;
     private static final int REQUEST_CODE_LIMITS = 11;
@@ -397,7 +395,6 @@ public class ExpensesActivityImpl extends AppCompatActivity implements ExpensesA
     }
 
     private void setDailyLimitView() {
-
         dateText = (TextView) findViewById(R.id.text_main_date);
         dateText.setOnClickListener(this);
 
